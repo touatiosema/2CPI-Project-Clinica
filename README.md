@@ -13,14 +13,16 @@ The application is devided into 4 main packages:
 Core
 ----
 The code consists of two files:
-* `App` : create the main stage and provide the following :
+#### App
+  create the main stage and provide the following :
   `show` : method that shows the window
   `hide` : method that hides the window
   `setView(view_name, [... initial_args])` : method that changes the scene displayed in the main window
   `entry` : property the sets the main scene to be displayed
-* `DB` : the database connector and query handler
+#### DB
+  the database connector and query handler
   `query(sql, [... vals])` :
-   ex : `query("SELECT * FROM doctors WHERE id = ?", 1)`
+  ex : `query("SELECT * FROM doctors WHERE id = ?", 1)`
 
 Models
 ------
