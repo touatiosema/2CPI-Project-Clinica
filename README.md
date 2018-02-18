@@ -17,25 +17,22 @@ The code consists of two files:
 create the main stage and provide the following :
 * `show` : method that shows the window
 * `hide` : method that hides the window
-* `setView(view_name, [... initial_args])` : method that changes the scene displayed in the main window
-* `newWindow(view_name, [... initial_args])` : method that creates a new window
+* `setView([window, ] view_name [, args])` : method that changes the scene displayed in the main window
+* `newWindow(view_name [, args])` : method that creates a new window
 * `entry` : property the sets the main scene to be displayed
 #### DB
 the database connector and query handler
-* `query(sql, [... vals])` :
+* `query(sql [, ...vals])` :
 * ex : `query("SELECT * FROM doctors WHERE id = ?", 1)`
-
-Models
-------
-Check example
 
 Controllers
 -----------
-Check example
+Should provide the init method for controllers communication
+* `init()`
+* `init(HashMap args)`
 
 Views
 -----
-Check example
 The only constraint to these files is that it must include a controller
 
 Creating new window

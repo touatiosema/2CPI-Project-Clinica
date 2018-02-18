@@ -15,10 +15,10 @@ public class App extends Application {
     private static HashMap scenes;
     private static Stage window;
 
-    private static final String entry = "Doctors";
+    private static final String entry = "Home";
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage) {
         app = this;
         window = primaryStage;
         App.setView(entry);
@@ -33,6 +33,9 @@ public class App extends Application {
     private static Controller load(String name) {
         return load(window, name);
     }
+
+
+
 
     private static Controller load(Stage window, String name) {
         FXMLLoader loader = new FXMLLoader(app.getClass().getResource("../views/" + name + ".fxml"));
@@ -69,7 +72,7 @@ public class App extends Application {
         setView(window, name);
     }
 
-    public static void setView(String name, Object ...args) {
+    public static void setView(String name, HashMap args) {
         setView(window, name, args);
     }
 
@@ -78,7 +81,7 @@ public class App extends Application {
         controller.init();
     }
 
-    public static void setView(Stage window, String name, Object ...args) {
+    public static void setView(Stage window, String name, HashMap args) {
         Controller controller = load(window, name);
         controller.init(args);
     }
@@ -90,7 +93,7 @@ public class App extends Application {
         return window;
     }
 
-    public static Stage newWindow(String name, Object ...args) {
+    public static Stage newWindow(String name, HashMap args) {
         Stage window = new Stage();
         setView(window, name, args);
         window.show();

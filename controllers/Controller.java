@@ -1,9 +1,11 @@
 package controllers;
 
-public class Controller {
-    private final String title = "Application";
-    private final int width = 600;
-    private final int height = 450;
+import java.util.HashMap;
+
+public abstract class Controller {
+    protected String title = "Application";
+    protected int width = 600;
+    protected int height = 450;
 
     public String getTitle() {
         return title;
@@ -18,5 +20,5 @@ public class Controller {
     }
 
     public void init() {}
-    public void init(Object ...args){}
+    public void init(HashMap data) {}
 }
