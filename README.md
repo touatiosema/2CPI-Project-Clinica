@@ -18,9 +18,10 @@ create the main stage and provide the following :
 * `show` : method that shows the window
 * `hide` : method that hides the window
 * `setView(view_name, [... initial_args])` : method that changes the scene displayed in the main window
+* `newWindow(view_name, [... initial_args])` : method that creates a new window
 * `entry` : property the sets the main scene to be displayed
 #### DB
-* the database connector and query handler
+the database connector and query handler
 * `query(sql, [... vals])` :
 * ex : `query("SELECT * FROM doctors WHERE id = ?", 1)`
 
@@ -36,3 +37,16 @@ Views
 -----
 Check example
 The only constraint to these files is that it must include a controller
+
+Creating new window
+-------------------
+To create a new window use the method newWindow in the App core class.
+* `newWindow` returns the new window (Stage object) that can be later used in setView
+Example :
+```java
+// create new window with the view "alert_one"
+Stage alert_window = App.newWindow("alert_one");
+
+// change the view to "alert_two"
+App.setView(alert_window, "alert_two");
+``` 

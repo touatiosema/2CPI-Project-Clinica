@@ -31,6 +31,10 @@ public class App extends Application {
     }
 
     private static Controller load(String name) {
+        return load(window, name);
+    }
+
+    private static Controller load(Stage window, String name) {
         FXMLLoader loader = new FXMLLoader(app.getClass().getResource("../views/" + name + ".fxml"));
         Controller controller = null;
 
@@ -62,13 +66,35 @@ public class App extends Application {
     }
 
     public static void setView(String name) {
-        Controller controller = load(name);
-        controller.init();
+        setView(window, name);
     }
 
     public static void setView(String name, Object ...args) {
-        Controller controller = load(name);
+        setView(window, name, args);
+    }
+
+    public static void setView(Stage window, String name) {
+        Controller controller = load(window, name);
+        controller.init();
+    }
+
+    public static void setView(Stage window, String name, Object ...args) {
+        Controller controller = load(window, name);
         controller.init(args);
+    }
+
+    public static Stage newWindow(String name) {
+        Stage window = new Stage();
+        setView(window, name);
+        window.show();
+        return window;
+    }
+
+    public static Stage newWindow(String name, Object ...args) {
+        Stage window = new Stage();
+        setView(window, name, args);
+        window.show();
+        return window;
     }
 
     public static void main(String[] args) {

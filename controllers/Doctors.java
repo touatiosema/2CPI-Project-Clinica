@@ -26,7 +26,7 @@ public class Doctors extends Controller {
     }
 
     public void viewPatients() {
-        App.setView("Patients");
+        App.newWindow("Patients");
     }
 }
 
