@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="368.0" prefWidth="569.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.Certificat">
+   <children>
+      <Label layoutX="27.0" layoutY="23.0" prefHeight="23.0" prefWidth="147.0" text="Certificat Medical:" textFill="#ee0000" />
+      <TextArea fx:id="textCertificat" layoutX="27.0" layoutY="46.0" prefHeight="253.0" prefWidth="493.0" promptText="Aucune certificat pour cette consultation." text="aucune certificat medical n'est redige pour cette consultation." />
+      <Button fx:id="buttonRetour" layoutX="468.0" layoutY="321.0" mnemonicParsing="false" text="retour" />
+   </children>
+</AnchorPane>
