@@ -138,6 +138,10 @@ public class ManageAccountsController extends Controller {
 
             if (medecin.isActive()) menu_activation.setText("Désactiver");
             else menu_activation.setText("Activer");
+
+            if (medecin.isAdmin()) {
+                menu_activation.setDisable(true);
+            }
         }
     }
 
@@ -156,25 +160,29 @@ public class ManageAccountsController extends Controller {
                         HBox layout = new HBox();
 
                         Medecin medecin = this.getTableView().getItems().get(this.getIndex());
-                        ActionButton deactivate_btn;
+                        ActionButton deactivate_btn = null;
 
-                        if (medecin.isActive()) {
-                            deactivate_btn = new ActionButton(this, "Désactivater", FontAwesomeIcon.CLOSE, "#B4302A") {
-                                @Override
-                                public void onAction(Object medecin) {
-                                    activationMedecin((Medecin) medecin);
-                                }
-                            };
+                        if (!medecin.isAdmin()) {
+
+                            if (medecin.isActive()) {
+                                deactivate_btn = new ActionButton(this, "Désactivater", FontAwesomeIcon.CLOSE, "#B4302A") {
+                                    @Override
+                                    public void onAction(Object medecin) {
+                                        activationMedecin((Medecin) medecin);
+                                    }
+                                };
+                            }
+
+                            else {
+                                deactivate_btn = new ActionButton(this, "Activer", FontAwesomeIcon.CHECK, "#29A131") {
+                                    @Override
+                                    public void onAction(Object medecin) {
+                                        activationMedecin((Medecin) medecin);
+                                    }
+                                };
+                            }
                         }
 
-                        else {
-                            deactivate_btn = new ActionButton(this, "Activer", FontAwesomeIcon.CHECK, "#29A131") {
-                                @Override
-                                public void onAction(Object medecin) {
-                                    activationMedecin((Medecin) medecin);
-                                }
-                            };
-                        }
 
                         ActionButton show_btn = new ActionButton(this, "Profile", FontAwesomeIcon.EYE, "#2c81a0") {
                             @Override
@@ -192,7 +200,8 @@ public class ManageAccountsController extends Controller {
 
 
 
-                        layout.getChildren().addAll(show_btn, edit_btn, deactivate_btn);
+                        layout.getChildren().addAll(show_btn, edit_btn);
+                        if (!medecin.isAdmin()) layout.getChildren().add(deactivate_btn);
 
                         return layout;
                     }

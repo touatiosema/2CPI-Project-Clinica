@@ -75,6 +75,10 @@ public class Medecin extends Personne{
         this.active = active;
     }
 
+    public boolean isAdmin() {
+        return id == 1;
+    }
+
     public void save() {
         if (id > 0)
             DB.query(
@@ -141,6 +145,11 @@ public class Medecin extends Personne{
         this.password = password;
     }
 
+
+    public static ArrayList<Medecin> all() {
+        return search("", "", "", true);
+    }
+
     public static ArrayList<Medecin> search(String nom, String prenom, String username, boolean show_disabled) {
         ArrayList<Medecin> list = new ArrayList<Medecin>();
 
@@ -191,8 +200,6 @@ public class Medecin extends Personne{
         return list;
 
     }
-
-
 
     public void getMedecin(int idMedecin){
         ResultSet result = DB.query("SELECT * FROM MEDECIN where id ="+idMedecin);

@@ -78,7 +78,8 @@ public class LoginController extends Controller {
         }
 
         if (Auth.isLoggedIn()) {
-            App.setView("Acceuil");
+            if (Auth.isAdmin()) App.setView("ManageAccounts");
+            else App.setView("Acceuil");
         }
 
     }

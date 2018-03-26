@@ -18,10 +18,6 @@
         <menus>
           <Menu mnemonicParsing="false" text="Navigation">
             <items>
-              <MenuItem mnemonicParsing="false" onAction="#acceuil" text="Acceuil" />
-                  <MenuItem mnemonicParsing="false" text="Patients" />
-                  <MenuItem mnemonicParsing="false" text="Medicaments" />
-                  <MenuItem mnemonicParsing="false" text="Parametres" />
                   <MenuItem fx:id="menu_logout" mnemonicParsing="false" text="Déconnecter" />
             </items>
           </Menu>

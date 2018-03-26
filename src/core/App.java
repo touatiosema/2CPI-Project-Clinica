@@ -7,19 +7,22 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import models.Medecin;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Set;
 
 public class App extends Application {
     private static App app;
     private static HashSet<Stage> windows;
     private static Stage window;
 
-    private static final String entry = "Login";
+    public static final String entry = "Login";
     private static final String app_name = "Doc";
+    public static final String app_foldername = ".docapp";
 
     @Override
     public void start(Stage primaryStage) {
@@ -27,7 +30,10 @@ public class App extends Application {
         app = this;
         window = primaryStage;
         windows.add(window);
-        App.setView(entry);
+        if (Setup.underSetup())
+            Setup.setup_admin();
+        else
+            App.setView(entry);
         App.show();
     }
 
@@ -128,7 +134,14 @@ public class App extends Application {
     }
 
     public static void main(String[] args) {
-        DB.start();
-        launch(args);
+        if (!Setup.check()) {
+            Setup.start();
+            launch(args);
+        }
+
+        else {
+            DB.start();
+            launch(args);
+        }
     }
 }

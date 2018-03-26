@@ -16,6 +16,8 @@ public class Auth {
         return user_id != 0;
     }
 
+    public static boolean isAdmin() { return user_id == 1; }
+
     public static void login(String username, String password) throws UserNotFoundException, WrongPasswordException, UserDeactivatedException {
         Medecin medecin = new Medecin(username);
 

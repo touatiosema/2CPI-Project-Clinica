@@ -1,14 +1,28 @@
 package core;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.sql.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class DB {
 
     public static Connection db;
-    private static final String db_name = "bdd";
+    public static final String db_name = "db";
+
+    private static final String DEFAULT_DELIMITER = ";";
+    private static final Pattern NEW_DELIMITER_PATTERN = Pattern.compile("(?:--|\\/\\/|\\#)?!DELIMITER=(.+)");
+    private static final Pattern COMMENT_PATTERN = Pattern.compile("^(?:--|\\/\\/|\\#).+");
 
     public static void start() {
+        start(false);
+    }
+
+    public static void start(boolean create) {
         try {
-            db = DriverManager.getConnection("jdbc:derby:" + db_name);
+            db = DriverManager.getConnection("jdbc:derby:" + System.getProperty("user.home") + "/" + App.app_foldername + "/" + db_name + (create ? ";create=true" : ""));
         }
 
         catch (SQLException ex) {
@@ -43,6 +57,7 @@ public class DB {
 
         catch (SQLException e) {
             System.out.println("[ERROR] SQL Query : " + sql);
+            e.printStackTrace();
         }
 
         return null;
