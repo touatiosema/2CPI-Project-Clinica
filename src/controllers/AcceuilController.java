@@ -1,6 +1,9 @@
 package controllers;
 
 import core.App;
+import core.Auth;
+
+import java.util.HashMap;
 
 public class AcceuilController extends Controller {
 
@@ -23,11 +26,13 @@ public class AcceuilController extends Controller {
     }
 
     public void meds() {
-//        App.setView("");
+        App.setView("Medicaments");
     }
 
     public void settings() {
-//        App.setView()
+        App.newWindow("EditAccount", new HashMap() {{
+            put("id", Auth.getUserID());
+        }});
     }
 
 }

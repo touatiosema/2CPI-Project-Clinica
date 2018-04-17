@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox maxHeight="217.0" maxWidth="337.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="217.0" prefWidth="337.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.NouveauMedicament">
+   <children>
+      <HBox spacing="3.0">
+         <children>
+            <Label prefHeight="40.0" prefWidth="118.0" text="Nom Commerciale: " />
+            <TextField fx:id="labNomCom" prefHeight="1.0" prefWidth="142.0" />
+         </children>
+         <padding>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </padding>
+      </HBox>
+      <HBox spacing="3.0">
+         <children>
+            <Label prefHeight="40.0" prefWidth="118.0" text="Nom Scientifique: " />
+            <TextField fx:id="labNomSci" prefHeight="1.0" prefWidth="142.0" />
+         </children>
+         <padding>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </padding>
+      </HBox>
+      <HBox spacing="3.0">
+         <children>
+            <Label prefHeight="40.0" prefWidth="118.0" text="type:" />
+            <TextField fx:id="labType" prefHeight="1.0" prefWidth="142.0" />
+         </children>
+         <padding>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </padding>
+      </HBox>
+      <HBox alignment="CENTER_RIGHT" prefHeight="65.0" prefWidth="335.0" spacing="3.0">
+         <children>
+            <Label fx:id="labWarning" prefHeight="54.0" prefWidth="167.0" textFill="#ee1313" />
+            <Button fx:id="btnSave" mnemonicParsing="false" text="sauvegarder" />
+            <Button fx:id="btnCancel" mnemonicParsing="false" text="Annuler" />
+         </children>
+         <padding>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </padding>
+      </HBox>
+   </children>
+</VBox>

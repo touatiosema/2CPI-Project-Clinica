@@ -5,6 +5,7 @@ import core.DB;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Time;
+import java.util.ArrayList;
 import java.util.Date;
 
 
@@ -98,20 +99,58 @@ public class RDV {
                     + this.date + "\',\'" + this.heure + "\',\'" + this.patient + "\',\'" + this.description + "\',\'" + this.type + "\')");
 
 
-            try {
-                ResultSet idt = DB.query("SELECT ID FROM AGENDA ORDER BY ID DESC");
-                idt.next();
-                id = idt.getInt("id");
+        }
+
+        try {
+            ResultSet idt = DB.query("SELECT ID FROM AGENDA ORDER BY ID DESC");
+            idt.next();
+            id = idt.getInt("id");
 
 
-                DB.query("INSERT INTO AGENDA_MEDECIN(ID_RDV, ID_MEDECIN) VALUES(?, ?)", id, Auth.getUserID());
-
-            }
-
-            catch(SQLException e) {
-                System.out.println("[ERROR] Could not get last  id after insertion");
-            }
+            DB.query("INSERT INTO AGENDA_MEDECIN(ID_RDV, ID_MEDECIN) VALUES(?, ?)", id, Auth.getUserID());
 
         }
+
+        catch(SQLException e) {
+            System.out.println("[ERROR] Could not get last  id after insertion");
+        }
+
+
+
+
     }
+
+    public  ArrayList<String> patientsName() {
+        ArrayList<String> list = new ArrayList<String>();
+
+        ResultSet result = DB.query("SELECT * FROM PATIENTS JOIN PERSONNE ON PATIENTS.ID_PERSONNE = PERSONNE.ID");
+
+        try {
+            while (result.next()) {
+              Patient P = new Patient(
+                        result.getInt("id"),
+                        result.getInt("id_personne"),
+                        result.getString("synopsis"),
+                        result.getString("profession"),
+                        result.getString("lieuDeTravail"),
+                        result.getString("groupage"),
+                        result.getInt("taille"),
+                        result.getString("nom"),
+                        result.getString("prenom"),
+                        result.getString("address"),
+                        result.getString("telephone"),
+                        result.getString("genre").charAt(0),
+                        result.getDate("dateDeNaissance")
+                );
+                list.add(P.getNom() + " " +P.getPrenom());
+            }
+        }
+
+        catch (SQLException e) {
+            System.out.println("[ERROR] SQLException while fetching patients list");
+        }
+
+        return list;
+    }
+
    }

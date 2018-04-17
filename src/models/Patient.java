@@ -6,7 +6,6 @@ import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class Patient extends Personne {
     private int id;
@@ -222,5 +221,9 @@ public class Patient extends Personne {
         }catch (SQLException e){
             System.out.println("can't access database here: "+e.getMessage());
         }
+    }
+
+    public void modifieSynopsis(String syn){
+        DB.query("update patients set Synopsis = ? where id = ?", syn, id);
     }
 }

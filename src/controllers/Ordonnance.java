@@ -1,126 +1,108 @@
 package controllers;
 
+import core.MyPrinter;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import models.LigneEnOrdonnance;
+import models.Medecin;
+import models.Patient;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class Ordonnance {
     private ArrayList<LigneEnOrdonnance> ordonnances;
     private Stage stage;
+    private Patient patient;
+    private Medecin medecin;
 
 
     @FXML
-    TableView<LigneTable> tableView;
+    MenuItem printPreviewItem;
     @FXML
-    TableColumn<LigneTable, String> columnMedicament;
+    MenuItem fermer;
     @FXML
-    TableColumn<LigneTable, String> columnType;
+    MenuItem printItem;
     @FXML
-    TableColumn<LigneTable, String> columnDose;
+    AnchorPane anchorPane;
     @FXML
-    TableColumn<LigneTable, String> columnRemarques;
+    Text textOrdonnance;
+
     @FXML
-    Button buttonRetour;
+    Label labelInfo;
+    @FXML
+    Label labelMedecin;
+    @FXML
+    Label labelCabinet;
+    @FXML
+    Label labelLieu;
+    @FXML
+    Label labelDate;
+    @FXML
+    Label labelAge;
+    @FXML
+    Label labelPatient;
 
     public void initialize(){
-            buttonRetour.setOnAction(e->close());
-            columnMedicament.setCellValueFactory(
-                    new PropertyValueFactory<LigneTable, String>("medicament"));
-            columnType.setCellValueFactory(new PropertyValueFactory<>("type"));
-            columnDose.setCellValueFactory(new PropertyValueFactory<>("dose"));
-            columnRemarques.setCellValueFactory(new PropertyValueFactory<>("remarque"));
-            //tableView.getColumns().addAll(columnDose,columnMedicament,columnRemarques,columnType);
-            //tableView.setItems();
+        fermer.setOnAction(event -> close());
+        printItem.setOnAction(event -> print());
+        printPreviewItem.setOnAction(event -> printPreview());
     }
 
-    public void setArgs(Stage stage, ArrayList<LigneEnOrdonnance> ordonnances){
+    public void setArgs(Stage stage, ArrayList<LigneEnOrdonnance> ordonnances, Patient patient, Medecin medecin){
     this.stage=stage;
     this.ordonnances=ordonnances;
+    this.patient=patient;
+    this.medecin=medecin;
     setInfo();
+    }
+
+    private void setInfo(){
+        labelAge.setText(String.valueOf(patient.getAge())+" ans");
+        labelDate.setText("le :"+new Date().toString());
+        labelMedecin.setText("DR :"+medecin.getNom().toUpperCase()+" "+medecin.getPrenom());
+        labelCabinet.setText("nom du Cabinet");
+        labelLieu.setText("le lieu ....");
+        labelInfo.setText("les information .......");
+        labelPatient.setText(patient.getNom().toUpperCase()+" "+patient.getPrenom());
+
+        if(ordonnances==null || ordonnances.isEmpty()) {
+            textOrdonnance.setText("Aucune Ordonnance pour cette consultation!");
+            return;
+        }
+       for(LigneEnOrdonnance ligne : ordonnances){
+           textOrdonnance.setText(textOrdonnance.getText().concat(ligne.getAll()+'\n'+'\n'));
+       }
+
+    }
+
+
+
+
+    public void print(){
+        MyPrinter.print(stage, anchorPane);
     }
 
     private void close(){
         stage.close();
     }
 
-    private void setInfo(){
-        tableView.setItems(getData(ordonnances));
-    }
-
-
-
-    public class LigneTable{
-        private String medicament;
-        private String dose;
-        private String remarque;
-        private String type;
-
-        public LigneTable(){
-            medicament="";
-            dose="";
-            remarque="";
-            type="";
-        }
-        public LigneTable(String medicament, String dose, String remarque, String type){
-            this.medicament=medicament;
-            this.remarque=remarque;
-            this.dose=dose;
-            this.type=type;
-        }
-
-        public String getMedicament() {
-            return medicament;
-        }
-
-        public void setMedicament(String medicament) {
-            this.medicament = medicament;
-        }
-
-        public String getDose() {
-            return dose;
-        }
-
-        public void setDose(String dose) {
-            this.dose = dose;
-        }
-
-        public String getRemarque() {
-            return remarque;
-        }
-
-        public void setRemarque(String remarque) {
-            this.remarque = remarque;
-        }
-
-        public String getType() {
-            return type;
-        }
-
-        public void setType(String type) {
-            this.type = type;
+    public void printPreview(){
+        try {
+            MyPrinter.preview(anchorPane);
+        } catch (IOException e) {
+            System.out.println("Certificat: printPreview: Exception");
+            e.printStackTrace();
         }
     }
 
-    private ObservableList<LigneTable> getData(ArrayList<LigneEnOrdonnance> ordonnances){
-        ObservableList<LigneTable> observableList = FXCollections.observableArrayList();
-        for(LigneEnOrdonnance ligneEnOrdonnance: ordonnances){
-            observableList.add(new LigneTable(ligneEnOrdonnance.getMedicament().getNomCommercial(),
-                                              ligneEnOrdonnance.getDose(),
-                                              ligneEnOrdonnance.getDetails(),
-                                              ligneEnOrdonnance.getMedicament().getType()));
-        }
-        return observableList;
-
-    }
 }
 
 

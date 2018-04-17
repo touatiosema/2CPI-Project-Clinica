@@ -9,7 +9,7 @@ import javafx.stage.Stage;
 import models.Patient;
 
 @SuppressWarnings("ALL")
-public class RedigerLettre {
+public class RedigerLettre extends Controller {
 
     //private Patient patient;
     //private Models.Medecin medecin;
@@ -112,6 +112,10 @@ public class RedigerLettre {
 
     private void close(){
         stage.close();
+    }
+
+    public void print() {
+
     }
 
 }

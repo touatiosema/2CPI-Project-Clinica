@@ -5,7 +5,12 @@ import com.jfoenix.controls.JFXTimePicker;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import models.RDV;
+import org.controlsfx.control.textfield.TextFields;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class PersonRdvController extends Controller {
 
@@ -14,8 +19,15 @@ public class PersonRdvController extends Controller {
     @FXML
     private JFXTimePicker heure;
 
+
+    AgendaController main_window;
+
     @FXML
     private TextArea description;
+
+    public void init(HashMap args) {
+        main_window = (AgendaController) args.get("main_window");
+    }
 
 
     public PersonRdvController() {
@@ -23,8 +35,8 @@ public class PersonRdvController extends Controller {
         min_height = height = max_height = 515;
         min_width = width=max_width=365;
 
-
     }
+
 
 
     @FXML
@@ -37,7 +49,7 @@ public class PersonRdvController extends Controller {
             personel.setDate(java.sql.Date.valueOf(date.getValue()));
             personel.setDescription(description.getText());
             personel.setHeure(java.sql.Time.valueOf(heure.getValue()));
-            personel.setType("P");
+            personel.setType("R");
             personel.setPatient("");
 
 
@@ -48,6 +60,9 @@ public class PersonRdvController extends Controller {
             alert.setHeaderText(null);
             alert.setContentText("Rendez vous ajouté ! ");
             alert.showAndWait();
+
+            main_window.refresh();
+            getWindow().close();
         } else {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Attention ! ");

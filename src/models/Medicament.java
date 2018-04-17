@@ -1,12 +1,10 @@
 package models;
 
 import core.DB;
-import sun.security.provider.MD2;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 
 public class Medicament {
@@ -18,6 +16,13 @@ public class Medicament {
     private String type;
 
     public Medicament(){}
+
+    public Medicament(int id, String nomCommercial, String nomSientifique, String type) {
+        this.id = id;
+        this.nomCommercial = nomCommercial;
+        this.nomSientifique = nomSientifique;
+        this.type = type;
+    }
 
     public Medicament(String nomCommercial, String nomSientifique, String type) {
         this.nomCommercial = nomCommercial;
@@ -52,6 +57,10 @@ public class Medicament {
 
     public void setNomSientifique(String nomSientifique) {
         this.nomSientifique = nomSientifique;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     //tested methodes:
@@ -95,6 +104,11 @@ public class Medicament {
         }
         return -1;
     }
+
+    public Medicament(String nomCommercial) {
+        this.nomCommercial = nomCommercial;
+    }
+
     //sauvgarder le med en retournant son id, si le med existe deja retourner son id.
     public  int saveMed(){
         ResultSet resultSet;
@@ -135,5 +149,30 @@ public class Medicament {
 
     }
 
+    public static ArrayList<Medicament> getAllMedicament(){
+        ArrayList<Medicament> medicaments = new ArrayList<>();
+        ResultSet resultSet = DB.query("SELECT * from MEDICAMENT");
+        try{
+            while (resultSet.next()){
+                medicaments.add(new Medicament(
+                                    resultSet.getInt("id"),
+                                    resultSet.getString("nom_commercial"),
+                                    resultSet.getString("nom_scientifique"),
+                                    resultSet.getString("type")));
+            }
+        }catch (SQLException e){
+            System.out.println("Modicament: getAllMedicament: "+e.getCause()+'\n'+e.getStackTrace());
+        }
+        return medicaments;
+    }
+
     //not yet tested methodes:
+    public static void modifieMed(int id, Medicament medicament){
+        DB.query("update MEDICAMENT set NOM_COMMERCIAL = ? , NOM_SCIENTIFIQUE=?, TYPE= ?  WHERE id=?",
+                    medicament.getNomCommercial(),
+                    medicament.getNomSientifique(),
+                    medicament.getType(),
+                    id);
+
+    }
 }

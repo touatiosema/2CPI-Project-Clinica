@@ -1,0 +1,9 @@
+.root{
+
+
+    -fx-background-image: url("Rdv.jpg");
+
+    -fx-background-size: auto 100%;
+    -fx-effect: dropshadow(three-pass-box, black, 30, 0.5, 0, 0);
+
+}

@@ -2,11 +2,8 @@ package models;
 
 import core.DB;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 
 public class LigneEnOrdonnance {
     private Medicament medicament;
@@ -15,6 +12,21 @@ public class LigneEnOrdonnance {
 
     public Medicament getMedicament(){
         return medicament;
+    }
+
+    public String getAll(){
+
+        StringBuilder returned = new StringBuilder(medicament.getNomCommercial());
+        int x = 40 - medicament.getNomCommercial().length();
+        for(int i = 0; i<x; i++)
+            returned.append(" ");
+        returned.append(details);
+        x = 40 - details.length();
+        for(int i = 0; i<x; i++)
+            returned.append(" ");
+        returned.append(dose);
+        System.out.println(returned);
+        return returned.toString();
     }
 
     public String getDose(){

@@ -2,34 +2,31 @@ package models;
 
 import core.DB;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class Bilan {
-    private ArrayList<String> ficheBilan;
 
+    private ArrayList<Examen> ficheBilan;
     public Bilan(){
-        ficheBilan = new ArrayList<String>();
+        ficheBilan = new ArrayList<Examen>();
     }
 
-
     public void afficher(){
-        for(String str: ficheBilan){
-            System.out.println(str);
+        for(Examen str: ficheBilan){
+            str.afficher();
         }
     }
 
-    public ArrayList<String> getFicheBilan(){
+    public ArrayList<Examen> getFicheBilan(){
         return ficheBilan;
     }
 
-    public void addBilan(String str){
-        ficheBilan.add(str);
+    public void addBilan(Examen exam){
+        ficheBilan.add(exam);
     }
-
 
     public Bilan getBilan(int idConsultation){
 
@@ -43,8 +40,9 @@ public class Bilan {
 
 
                 if(resultSet2.next()){
-                    String str = resultSet2.getString("examen");
-                    bilan.addBilan(str);
+                    Examen examen = new Examen(resultSet2.getString("examen"),
+                            resultSet2.getString("typeExamen"));
+                    bilan.addBilan(examen);
                 }
             }
         }catch (SQLException e ){
@@ -54,7 +52,7 @@ public class Bilan {
         }
     }
 
-    public void saveBilan(int idConsultation, ArrayList<String> bilan) throws NullPointerException {
+    public void saveBilan(int idConsultation, ArrayList<Examen> bilan) throws NullPointerException {
         ResultSet resultSet;
         //Connection connection = DB.getConnection();
         ResultSet resultSet1;
@@ -62,7 +60,7 @@ public class Bilan {
         if(bilan==null) {
             throw new NullPointerException();
         }else{
-            for(String str: bilan) {
+            for(Examen str: bilan) {
                 resultSet = DB.query("SELECT * FROM EXAMS WHERE EXAMEN = '"+str+"'");
                 try{
 
@@ -72,7 +70,7 @@ public class Bilan {
                                 idConsultation, examenId);
                         }else{
                         try {
-                            DB.query("INSERT INTO EXAMS(EXAMEN) values(?)",str);
+                            DB.query("INSERT INTO EXAMS(EXAMEN, typeExamen) values(?,?)",str.getName(), str.getType());
                             resultSet1 = DB.query("select id from exams order by id desc ");
                             if(resultSet1.next())
                                 DB.query("INSERT INTO EXAMS_CONSULTATION(ID_CONSULTATION,ID_EXAMEN) VALUES(?,?)",
@@ -93,4 +91,5 @@ public class Bilan {
 
         }
     }
+
 }

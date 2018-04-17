@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+
+<VBox xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.PreviewController">
+   <children>
+      <ScrollPane fx:id="scrollPane" minHeight="575.0" minWidth="597.0" prefHeight="575.0" prefWidth="597.0" style="-fx-background-color: #a4a4a4;" VBox.vgrow="ALWAYS">
+        <content>
+          <AnchorPane fx:id="anchorPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: white;">
+               <children>
+                  <ImageView fx:id="imageView" fitHeight="287.0" fitWidth="493.0" layoutX="29.0" layoutY="25.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="29.0" AnchorPane.topAnchor="25.0" />
+                  <Rectangle fx:id="rectangle" arcHeight="5.0" arcWidth="5.0" fill="#3574b000" height="842.0" stroke="BLACK" strokeType="INSIDE" width="608.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
+               </children>
+            </AnchorPane>
+        </content>
+      </ScrollPane>
+      <VBox prefHeight="32.0" prefWidth="650.0" VBox.vgrow="NEVER">
+         <children>
+            <HBox alignment="CENTER_LEFT" prefHeight="38.0" prefWidth="597.0" spacing="5.0">
+               <children>
+                  <Region prefHeight="25.0" prefWidth="212.0" HBox.hgrow="NEVER" />
+                  <Label prefHeight="17.0" prefWidth="46.0" text="Zoom:" />
+                  <Button fx:id="zoomIn" mnemonicParsing="false" prefHeight="25.0" prefWidth="36.0" text="In" />
+                  <Button fx:id="zoomOut" mnemonicParsing="false" prefHeight="25.0" prefWidth="42.0" text="out" />
+                  <Region prefHeight="38.0" prefWidth="7.0" />
+                  <Button fx:id="reset" mnemonicParsing="false" prefHeight="25.0" prefWidth="53.0" text="Reset" />
+                  <Region prefHeight="25.0" prefWidth="122.0" HBox.hgrow="NEVER" />
+                  <Button fx:id="print" mnemonicParsing="false" prefHeight="25.0" prefWidth="51.0" text="Print" />
+                  <Region prefHeight="25.0" prefWidth="29.0" HBox.hgrow="ALWAYS" />
+               </children>
+            </HBox>
+            <HBox spacing="5.0">
+               <children>
+                  <Region prefHeight="25.0" prefWidth="69.0" />
+                  <Label text="Format:" />
+                  <ChoiceBox fx:id="choiceBox" prefHeight="25.0" prefWidth="73.0" />
+                  <ChoiceBox fx:id="choiceBox1" prefHeight="25.0" prefWidth="73.0" />
+                  <Region prefHeight="25.0" prefWidth="106.0" HBox.hgrow="NEVER" />
+                  <Label prefHeight="17.0" prefWidth="49.0" text="Marges:" />
+                  <ChoiceBox fx:id="choiceBox2" prefHeight="25.0" prefWidth="121.0" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </children>
+</VBox>

@@ -8,7 +8,7 @@ import javafx.scene.control.TextArea;
 import javafx.stage.Stage;
 
 
-public class RedigerCertificat {
+public class RedigerCertificat extends Controller {
 //    private Patient patient;
 //    private Models.Medecin medecin;
 //    private String modele;  // a developper vers une lettre plus convineint
@@ -129,5 +129,7 @@ public class RedigerCertificat {
         stage.close();
     }
 
+    public void print() {
 
+    }
 }

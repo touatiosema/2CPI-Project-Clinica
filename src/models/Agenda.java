@@ -98,6 +98,7 @@ public class Agenda {
                         element.setPatient(resultSet1.getString("PATIENT"));
                         element.setRemarques(resultSet1.getString("DESCRIPTION"));
                         element.setType_de_RDV('R');
+                        System.out.println("it's here");
                         rdvs.add(element);
                         element.setId(resultSet1.getInt("id" ));
                     }
@@ -196,7 +197,7 @@ public class Agenda {
                         element.setId(resultSet1.getInt("id"));
                         element.setDate(resultSet1.getString("DATE"));
                         element.setHeure(resultSet1.getString("TIME"));
-                        element.setPatient(resultSet1.getString("TITRE"));
+                        element.setPatient(resultSet1.getString("Patient"));
                         element.setRemarques(resultSet1.getString("DESCRIPTION"));
                         element.setType_de_RDV(resultSet1.getString("TYPE").charAt(0));
                         rdvs.add(element);

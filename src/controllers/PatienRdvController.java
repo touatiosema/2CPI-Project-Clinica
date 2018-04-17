@@ -1,4 +1,4 @@
-package controllers;
+    package controllers;
 
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTimePicker;
@@ -7,8 +7,12 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import models.RDV;
+import org.controlsfx.control.textfield.TextFields;
 
-public class PatienRdvController extends Controller {
+import java.util.ArrayList;
+import java.util.HashMap;
+
+    public class PatienRdvController extends Controller {
 
 
         @FXML
@@ -18,14 +22,28 @@ public class PatienRdvController extends Controller {
 
         @FXML
         private TextArea description;
-        @FXML
-        private TextField name;
-        public PatienRdvController(){
-             title = "+ Rendez-vous Professionel";
-            height=  515;
-            width =365;
 
-            }
+        AgendaController main_window;
+
+      @FXML
+    private TextField name;
+      private  RDV PatRdv = new RDV();
+
+    public PatienRdvController(){
+            title = "+ Rendez-vous professionel";
+            min_height = height = max_height = 515;
+            min_width = width = max_width = 365;
+        }
+
+        public void init(HashMap args) {
+            main_window = (AgendaController) args.get("main_window");
+        }
+
+
+        public void initialize(){
+            ArrayList<String> possibleWords = PatRdv.patientsName();
+            TextFields.bindAutoCompletion(name, possibleWords);
+        }
 
         public void SaveRdv2(){
             if (java.sql.Date.valueOf(date.getValue()).toString().length() !=0 &&
@@ -43,7 +61,7 @@ public class PatienRdvController extends Controller {
                 PatRdv.setHeure(java.sql.Time.valueOf(heure.getValue()));
                 PatRdv.setPatient(name.getText());
 
-                PatRdv.setType("R");
+                PatRdv.setType("F");
 
                 PatRdv.save();
 
@@ -55,6 +73,9 @@ public class PatienRdvController extends Controller {
                 alert.setHeaderText(null);
                 alert.setContentText("Rendez vous ajouté ! ");
                 alert.showAndWait();
+
+                main_window.refresh();
+                getWindow().close();
 
 
             }

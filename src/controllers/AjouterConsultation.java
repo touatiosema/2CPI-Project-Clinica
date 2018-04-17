@@ -5,7 +5,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -17,7 +16,6 @@ import models.Ordonnance;
 
 import java.io.IOException;
 import java.sql.Time;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Date;
@@ -67,6 +65,7 @@ public class AjouterConsultation {
 
     public void setOrdonnance(ArrayList<LigneEnOrdonnance> ligneEnOrdonnances){
         this.ordonnance.setOrdonnances(ligneEnOrdonnances);
+        this.ordonnance.afficher();
     }
 
     public void initialize(){
@@ -195,7 +194,7 @@ public class AjouterConsultation {
             stage.show();
         }catch (IOException e){
             System.out.println("Controllers: ajouterConsultation: redigerCertificat(): "+
-                    e.getCause());
+                    e.getCause()+e.getStackTrace());
         }
 
     }
@@ -204,9 +203,9 @@ public class AjouterConsultation {
 
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../views/OrdonnanceSellma.fxml"));
             Parent root1 = (Parent) fxmlLoader.load();
-            OrdonnanceController redigerCertificat = (OrdonnanceController) fxmlLoader.getController();
+            OrdonnanceController redigerOrdonnance = (OrdonnanceController) fxmlLoader.getController();
             Stage stage = new Stage();
-            redigerCertificat.setArgs( ajouterConsultation, stage);
+            redigerOrdonnance.setArgs( ajouterConsultation, stage);
             stage.initModality(Modality.APPLICATION_MODAL);
             //stage.initStyle(StageStyle.UNDECORATED);
             stage.setTitle("Redaction d'une Ordonnance");
@@ -214,7 +213,7 @@ public class AjouterConsultation {
             stage.show();
         } catch (IOException e) {
             System.out.println("Controllers: ajouterConsultation: redigerOrdonnance(): " +
-                    e.getCause());
+                    e.getCause()+e.getStackTrace());
         }
     }
 

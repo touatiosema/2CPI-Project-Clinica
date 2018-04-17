@@ -21,6 +21,13 @@ public class   LigneEnagenda {
     private String Date;
     private String Remarques;
 
+    public static void supprimer(int id) {
+        DB.query("DELETE from AGENDA_MEDECIN where ID_RDV = " + id);
+        DB.query("DELETE from AGENDA where ID = " + id);
+
+
+    }
+
     public LigneEnagenda(){}
 
     public void setType_de_RDV(char c){
