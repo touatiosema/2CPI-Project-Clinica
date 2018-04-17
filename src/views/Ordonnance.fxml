@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+
+<AnchorPane prefHeight="420.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.Ordonnance">
+   <children>
+      <TableView fx:id="tableView" layoutY="26.0" prefHeight="349.0" prefWidth="600.0">
+        <columns>
+          <TableColumn fx:id="columnMedicament" prefWidth="97.0" text="medicament" />
+            <TableColumn fx:id="columnType" prefWidth="63.0" text="type" />
+          <TableColumn fx:id="columnDose" text="dose" />
+            <TableColumn fx:id="columnRemarques" prefWidth="336.0" text="remarques" />
+        </columns>
+      </TableView>
+      <Label layoutX="18.0" layoutY="6.0" prefHeight="17.0" prefWidth="158.0" text="affichage de l'ordonnance:" />
+      <Button fx:id="buttonRetour" layoutX="526.0" layoutY="375.0" mnemonicParsing="false" text="retour" />
+   </children>
+</AnchorPane>

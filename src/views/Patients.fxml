@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox minHeight="400.0" minWidth="600.0" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.PatientsController">
+         <children>
+      <MenuBar>
+         <menus>
+            <Menu mnemonicParsing="false" text="Navigation">
+              <items>
+                <MenuItem mnemonicParsing="false" onAction="#acceuil" text="Acceuil" />
+                  <MenuItem mnemonicParsing="false" text="Agenda" />
+                  <MenuItem mnemonicParsing="false" text="Medicaments" />
+                  <MenuItem mnemonicParsing="false" text="Parametres" />
+                  <MenuItem fx:id="menu_logout" mnemonicParsing="false" text="Déconnecter" />
+              </items>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Patient">
+              <items>
+                <MenuItem fx:id="menu_new" mnemonicParsing="false" text="Ajouter" />
+                  <MenuItem fx:id="menu_show" mnemonicParsing="false" text="Consulter" />
+              </items>
+            </Menu>
+         </menus>
+      </MenuBar>
+            <TableView fx:id="patients_table" prefHeight="134.0" prefWidth="600.0" style="-fx-focus-color: transparent; -fx-faint-focus-color: transparent;" VBox.vgrow="ALWAYS">
+              <columns>
+                  <TableColumn editable="false" prefWidth="170" text="Nom">
+                    <cellValueFactory><PropertyValueFactory property="nom" /></cellValueFactory>
+                  </TableColumn>
+
+                  <TableColumn editable="false" prefWidth="170" text="Prenom">
+                      <cellValueFactory><PropertyValueFactory property="prenom" /></cellValueFactory>
+                  </TableColumn>
+                  <TableColumn editable="false" prefWidth="50" text="Genre">
+                      <cellValueFactory><PropertyValueFactory property="genre" /></cellValueFactory>
+                  </TableColumn>
+                  <TableColumn editable="false" prefWidth="80" text="Telephone">
+                      <cellValueFactory><PropertyValueFactory property="telephone" /></cellValueFactory>
+                  </TableColumn>
+              </columns>
+            </TableView>
+      <HBox fillHeight="false" prefHeight="0.0" prefWidth="590.0" spacing="5.0" VBox.vgrow="NEVER">
+         <children>
+            <TextField fx:id="search_nom" prefHeight="25.0" prefWidth="168.0" promptText="Nom" />
+            <TextField fx:id="search_prenom" prefHeight="25.0" prefWidth="167.0" promptText="Prenom" />
+            <ChoiceBox fx:id="search_genre" prefHeight="25.0" prefWidth="53.0" />
+            <TextField fx:id="search_telephone" prefHeight="25.0" prefWidth="75.0" promptText="Telephone" />
+            <Button mnemonicParsing="false" onAction="#resetSearch" prefHeight="25.0" prefWidth="128.0" text="Reinitialiser" />
+         </children>
+         <VBox.margin>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </VBox.margin>
+      </HBox>
+         </children>
+      </VBox>
