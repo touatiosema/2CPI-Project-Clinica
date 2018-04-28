@@ -1,19 +1,19 @@
 package core;
 
 import controllers.Controller;
+import controllers.LayoutController;
+import core.notification.Notification;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import models.Medecin;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public class App extends Application {
     private static App app;
@@ -21,11 +21,19 @@ public class App extends Application {
     private static Stage window;
 
     public static final String entry = "Login";
-    private static final String app_name = "Doc";
-    public static final String app_foldername = ".docapp";
+    public static final String entry_setup = "ManageAccounts";
+    private static final String app_name = "Clinica";
+    public static final String app_foldername = ".clinica";
+
+    private static final String[] layout_blacklist = new String[] { "Login", "CabinetSetup", "AdminSetup"};
+    private static Parent layout_root = null;
+    private static Controller layout_controller = null;
+
+    private static Notification notifier = null;
 
     @Override
     public void start(Stage primaryStage) {
+
         windows = new HashSet<Stage>();
         app = this;
         window = primaryStage;
@@ -35,6 +43,10 @@ public class App extends Application {
         else
             App.setView(entry);
         App.show();
+    }
+
+    public static Stage getWindow() {
+        return window;
     }
 
     @Override
@@ -47,7 +59,8 @@ public class App extends Application {
     }
 
     private static Controller load(Stage window, String name) {
-        FXMLLoader loader = new FXMLLoader(app.getClass().getResource("../views/" + name + ".fxml"));
+
+        FXMLLoader loader = new FXMLLoader(app.getClass().getResource("/views/" + name + ".fxml"));
         Controller controller = null;
 
         try {
@@ -58,17 +71,51 @@ public class App extends Application {
                 System.out.println("[ERROR] View file " + name + " does not have a Controller");
             }
 
-            window.setMinHeight(controller.getMin_height()  + 40);
-            window.setMaxHeight(controller.getMax_height());
-            window.setMinWidth(controller.getMin_width() + 10);
-            window.setMaxWidth(controller.getMax_width());
-            controller.setWindow(window);
-            window.setScene(new Scene(root, controller.getWidth(), controller.getHeight()));
-            window.setTitle(app_name + " - " + controller.getTitle());
+            boolean blacklisted = false;
+
+            for (String view : layout_blacklist) {
+                if (view.equals(name)) {
+                    blacklisted = true;
+                    break;
+                }
+            }
+
+            if (window == App.window && !blacklisted) {
+                if (layout_root == null) {
+                    FXMLLoader layout_loader = new FXMLLoader(app.getClass().getResource("/views/Layout.fxml"));
+                    layout_root = layout_loader.load();
+                    layout_controller = layout_loader.getController();
+                    window.setScene(new Scene(layout_root, controller.getWidth() + 50, controller.getHeight()));
+                }
+
+
+                window.setMinHeight(controller.getMin_height()  + 40);
+                window.setMaxHeight(controller.getMax_height());
+                window.setMinWidth(controller.getMin_width() + 60);
+                window.setMaxWidth(controller.getMax_width() + 50);
+                controller.setWindow(window);
+                layout_controller.setWindow(window);
+                window.setTitle(app_name + " - " + controller.getTitle());
+
+                ( (LayoutController)layout_controller).setContent(root, name);
+                ( (LayoutController)layout_controller).setContentWidth(controller.getMin_width() + 10, controller.getWidth(), controller.getMax_width());
+            }
+
+            else {
+                window.setMinHeight(controller.getMin_height()  + 40);
+                window.setMaxHeight(controller.getMax_height());
+                window.setMinWidth(controller.getMin_width() + 10);
+                window.setMaxWidth(controller.getMax_width());
+                controller.setWindow(window);
+                window.setScene(new Scene(root, controller.getWidth(), controller.getHeight()));
+                window.setTitle(app_name + " - " + controller.getTitle());
+            }
+
         }
 
         catch(IOException e) {
             System.out.println("[ERROR] Could not load fxml file : " + name);
+            e.printStackTrace();
         }
 
         return controller;
@@ -131,6 +178,16 @@ public class App extends Application {
         Auth.logout();
         App.clearWindows();
         App.setView("Login");
+        layout_controller = null;
+        layout_root = null;
+    }
+
+    public static void setNotifier(Notification n) {
+        notifier = n;
+    }
+
+    public static boolean isNotifying() {
+        return notifier != null;
     }
 
     public static void main(String[] args) {
@@ -143,5 +200,9 @@ public class App extends Application {
             DB.start();
             launch(args);
         }
+    }
+
+    public static App getApp() {
+        return app;
     }
 }

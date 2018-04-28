@@ -1,5 +1,6 @@
 package controllers;
 
+import com.jfoenix.controls.JFXComboBox;
 import core.App;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -21,7 +22,7 @@ public class NewPatientController extends Controller {
     TextField lastname;
 
     @FXML
-    ChoiceBox genreBox;
+    JFXComboBox genreBox;
 
     @FXML
     DatePicker date;
@@ -45,7 +46,7 @@ public class NewPatientController extends Controller {
     TextField taille;
 
     @FXML
-    ChoiceBox groupageBox;
+    JFXComboBox groupageBox;
 
     @FXML
     public void init(HashMap args){
@@ -62,7 +63,7 @@ public class NewPatientController extends Controller {
     public NewPatientController() {
         title = "Nouveau Patient";
         min_width = width = max_width = 400;
-        min_height = height = max_height = 450;
+        min_height = height = max_height = 660;
     }
 
 
@@ -99,17 +100,16 @@ public class NewPatientController extends Controller {
                 Pat.setId_personne(P.getId());
 
                 if (synopsis.getText().length() ==0){synopsis.setText(""); }
+
                 Pat.setSynopsis(synopsis.getText());
-
                 Pat.setProfession(travaille.getText());
-
                 Pat.setLieuDeTravail(lieuTrav.getText());
-
                 Pat.setGroupage(groupageBox.getSelectionModel().getSelectedItem().toString());
-
-
                 Pat.setTaille(t);
+
                 Pat.save();
+
+
                 alert("Terminer", "Votre patient est ajouté avec succès ! ", Alert.AlertType.INFORMATION);
                 main_window.update();
                 getWindow().close();

@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox stylesheets="@../assets/font.css"  prefHeight="450.0" prefWidth="450.0" spacing="5.0" style="-fx-background-color: #309bd1" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.ConsultationController">
+    <VBox VBox.vgrow="ALWAYS">
+        <HBox spacing="5">
+            <JFXButton fx:id="ordonnance_btn" prefHeight="31.0" style="-fx-background-color: rgba(24,109,151,1);" text="Ordonnance" textFill="WHITE">
+            <padding>
+               <Insets bottom="7.0" left="7.0" right="7.0" top="7.0" />
+            </padding></JFXButton>
+            <JFXButton fx:id="certificat_btn" prefHeight="31.0" prefWidth="80.0" style="-fx-background-color: rgba(24,109,151,0.9);" text="Certificat" textFill="WHITE">
+            <padding>
+               <Insets bottom="7.0" left="7.0" right="7.0" top="7.0" />
+            </padding></JFXButton>
+            <JFXButton fx:id="bilan_btn" prefHeight="31.0" prefWidth="75.0" style="-fx-background-color: rgba(24,109,151,0.8);" text="Bilan" textFill="WHITE">
+            <padding>
+               <Insets bottom="7.0" left="7.0" right="7.0" top="7.0" />
+            </padding></JFXButton>
+            <JFXButton fx:id="lettrereorientation_btn" style="-fx-background-color: rgba(24,109,151,0.7);" text="Lettre de reorientation" textFill="WHITE">
+            <padding>
+               <Insets bottom="7.0" left="7.0" right="7.0" top="7.0" />
+            </padding></JFXButton>
+            <VBox.margin>
+                <Insets bottom="15.0" />
+            </VBox.margin>
+        </HBox>
+
+        <HBox>
+            <children>
+                <FontAwesomeIconView fill="WHITE" glyphName="CARET_RIGHT" strokeType="OUTSIDE" strokeWidth="0.0">
+                    <HBox.margin>
+                        <Insets bottom="2.0" right="4.0" top="2.0" />
+                    </HBox.margin></FontAwesomeIconView>
+                <Label text="Poids : " textFill="WHITE">
+                    <font>
+                        <Font name="System Bold" size="12.0" />
+                    </font></Label>
+                <Label fx:id="poids_label" textFill="WHITE" />
+            </children>
+            <VBox.margin>
+                <Insets left="5.0" />
+            </VBox.margin>
+        </HBox>
+
+        <Label text="Motif :" textFill="WHITE">
+            <font>
+                <Font name="System Bold" size="12.0" />
+            </font>
+            <graphic>
+                <FontAwesomeIconView fill="WHITE" glyphName="CARET_RIGHT" strokeType="OUTSIDE" strokeWidth="0.0" />
+            </graphic>
+            <VBox.margin>
+                <Insets left="5.0" top="5.0" />
+            </VBox.margin></Label>
+        <Label fx:id="motif_label" alignment="TOP_LEFT" minHeight="25.0" style="-fx-border-width: 0 0 0 1px; -fx-border-color: white;" textFill="WHITE" wrapText="true">
+            <opaqueInsets>
+                <Insets />
+            </opaqueInsets>
+            <padding>
+                <Insets bottom="5.0" left="10.0" top="5.0" />
+            </padding>
+            <VBox.margin>
+                <Insets left="5.0" />
+            </VBox.margin></Label>
+
+        <Label text="Examen clinique :" textFill="WHITE">
+            <font>
+                <Font name="System Bold" size="12.0" />
+            </font>
+            <graphic>
+                <FontAwesomeIconView fill="WHITE" glyphName="CARET_RIGHT" strokeType="OUTSIDE" strokeWidth="0.0" />
+            </graphic>
+            <VBox.margin>
+                <Insets left="5.0" top="15.0" />
+            </VBox.margin></Label>
+        <Label fx:id="exam_clinic_label" alignment="TOP_LEFT" minHeight="25.0" style="-fx-border-width: 0 0 0 1px; -fx-border-color: white;" textFill="WHITE" wrapText="true">
+            <padding>
+                <Insets bottom="5.0" left="10.0" top="5.0" />
+            </padding>
+            <VBox.margin>
+                <Insets left="5.0" />
+            </VBox.margin></Label>
+
+        <Label text="Examen supplementaire :" textFill="WHITE">
+            <font>
+                <Font name="System Bold" size="12.0" />
+            </font>
+            <graphic>
+                <FontAwesomeIconView fill="WHITE" glyphName="CARET_RIGHT" strokeType="OUTSIDE" strokeWidth="0.0" />
+            </graphic>
+            <VBox.margin>
+                <Insets left="5.0" top="15.0" />
+            </VBox.margin></Label>
+        <Label fx:id="exam_supp_label" alignment="TOP_LEFT" minHeight="25.0" style="-fx-border-width: 0 0 0 1px; -fx-border-color: white;" textFill="WHITE" wrapText="true">
+            <padding>
+                <Insets bottom="5.0" left="10.0" top="5.0" />
+            </padding>
+            <VBox.margin>
+                <Insets left="5.0" />
+            </VBox.margin></Label>
+
+        <Label text="Diagnostique :" textFill="WHITE">
+            <font>
+                <Font name="System Bold" size="12.0" />
+            </font>
+            <graphic>
+                <FontAwesomeIconView fill="WHITE" glyphName="CARET_RIGHT" strokeType="OUTSIDE" strokeWidth="0.0" />
+            </graphic>
+            <VBox.margin>
+                <Insets left="5.0" top="15.0" />
+            </VBox.margin></Label>
+        <Label fx:id="diagnostique_label" alignment="TOP_LEFT" minHeight="25.0" style="-fx-border-width: 0 0 0 1px; -fx-border-color: white;" textFill="WHITE" wrapText="true">
+            <padding>
+                <Insets bottom="5.0" left="10.0" top="5.0" />
+            </padding>
+            <VBox.margin>
+                <Insets left="5.0" />
+            </VBox.margin></Label>
+    </VBox>
+
+    <HBox VBox.vgrow="NEVER">
+        <Label text="Rédigée par " textFill="WHITE" /> <Label fx:id="medecin_field" textFill="WHITE" />
+    </HBox>
+
+    <padding>
+        <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+    </padding>
+</VBox>

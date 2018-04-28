@@ -2,6 +2,7 @@ package models;
 
 import core.DB;
 
+import javax.xml.transform.Result;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -14,6 +15,31 @@ public class Ordonnance {
 
     public void setOrdonnances(ArrayList<LigneEnOrdonnance> ordonnances) {
         this.ordonnances = ordonnances;
+    }
+
+    public Ordonnance(int consultation_id) {
+        ordonnances = new ArrayList<LigneEnOrdonnance>();
+        ResultSet q = DB.query("SELECT * FROM ORDONNANCE WHERE ID_CONSULTATION = ?", consultation_id);
+
+        try {
+            while (q.next()) {
+                int id_ligne = q.getInt("ID_LIGNE_ORDONNANCE");
+                ResultSet q2 = DB.query("SELECT * FROM LIGNE_ORDONNANCE WHERE ID = ?", id_ligne);
+                q2.next();
+
+                String doze = q2.getString("doze");
+                String detail = q2.getString("detail");
+                int id_med = q2.getInt("id_medicament");
+
+                ordonnances.add(new LigneEnOrdonnance(Medicament.getById(id_med), doze, detail));
+            }
+        }
+
+        catch (SQLException e) {
+            System.out.println("[ERROR] While getting the ordonnance");
+        }
+
+        System.out.println(ordonnances.size());
     }
 
     public static ArrayList<String > getMedList() {
@@ -70,6 +96,12 @@ public class Ordonnance {
         return ordonnances;
     }
 
+
+
+    public static Ordonnance getOrdonnanceById(int id) {
+        Ordonnance o = new Ordonnance();
+        return o.getOrdonnance(id);
+    }
 
     //return an ordonnace en utilisant l'id du consultation
 

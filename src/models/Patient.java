@@ -17,6 +17,40 @@ public class Patient extends Personne {
     private int taille;
 
     public Patient() {}
+
+    public Patient(int id) {
+        ResultSet q = DB.query("SELECT * FROM Patients WHERE id = ?", id);
+
+        try {
+            if (!q.next()) return;
+
+            this.id = q.getInt("id");
+            this.id_personne = q.getInt("id_personne");
+            this.synopsis = q.getString("synopsis");
+            this.profession = q.getString("profession");
+            this.lieuDeTravail = q.getString("lieuDeTravail");
+            this.groupage = q.getString("groupage");
+            this.taille = q.getInt("taille");
+
+            q = DB.query("SELECT * FROM personne WHERE id = ?", id_personne);
+
+            if (!q.next()) return;
+
+            super.setId(id_personne);
+            setNom(q.getString("nom"));
+            setPrenom(q.getString("prenom"));
+            setAddress(q.getString("address"));
+            setTelephone(q.getString("telephone"));
+            setGenre(q.getString("genre").charAt(0));
+            setDateDeNaissance(q.getDate("dateDeNaissance"));
+
+        }
+
+        catch (SQLException e) {
+            System.out.println("[ERROR] Could not get patient with id");
+        }
+    }
+
     public Patient(int id, int id_personne, String synopsis, String profession, String lieuDeTravail, String groupage, int taille) {
         this.id = id;
         this.id_personne = id_personne;
@@ -121,31 +155,10 @@ public class Patient extends Personne {
         this.taille = taille;
     }
 
-    public static ArrayList<Patient> search(String nom, String prenom, String genre, String telephone) {
-        String sql = "";
-        if (nom.length() > 0) sql += "nom LIKE \'" + nom + "%\' ";
-
-        if (prenom.length() > 0) {
-            if (sql.length() > 0) sql += " AND ";
-            sql += "prenom LIKE \'" + prenom + "%\' ";
-        }
-
-        if (genre.length() > 0) {
-            if (sql.length() > 0) sql += " AND ";
-            sql += "genre =  \'" + genre + "\' ";
-        }
-
-        if (telephone.length() > 0) {
-            if (sql.length() > 0) sql += " AND ";
-            sql += "telephone LIKE \'" + telephone + "%\' ";
-        }
-
-        if (!nom.equals("") || !prenom.equals("") || !genre.equals("") || !telephone.equals("")) sql = " WHERE " + sql;
-
+    public static ArrayList<Patient> search(String s) {
+        s = s.toLowerCase();
+        ResultSet result = DB.query("SELECT * FROM PATIENTS JOIN PERSONNE ON PATIENTS.ID_PERSONNE = PERSONNE.ID WHERE lower(nom) LIKE '"+s+"%' OR lower(prenom) LIKE '"+s+"%'");
         ArrayList<Patient> list = new ArrayList<Patient>();
-
-        ResultSet result = DB.query("SELECT * FROM PATIENTS JOIN PERSONNE ON PATIENTS.ID_PERSONNE = PERSONNE.ID" + sql);
-
         try {
             while (result.next()) {
                 list.add(new Patient(

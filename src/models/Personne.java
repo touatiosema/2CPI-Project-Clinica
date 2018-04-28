@@ -131,4 +131,8 @@ public class Personne {
         LocalDate naissnce = dateDeNaissance.toLocalDate();
         return Period.between(naissnce, now).getYears();
     }
+
+    public String getFullName() {
+        return nom.toUpperCase() + " " + prenom.substring(0, 1).toUpperCase() + prenom.toLowerCase().substring(1);
+    }
 }

@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<HBox stylesheets="@../assets/font.css"  prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.LayoutController">
+
+
+
+    <VBox fx:id="sidebar" fillWidth="false" minWidth="200.0" prefHeight="400.0" prefWidth="200.0" style="-fx-background-color: linear-gradient(#309bd1 0%, #308ec3 33%, #2e81b4 66%); ">
+
+        <JFXButton fx:id="hamburger_btn" alignment="TOP_LEFT" prefWidth="200.0" style="-fx-background-color: transparent; -fx-cursor: hand" text="Retour" textFill="WHITE" VBox.vgrow="NEVER">
+            <graphic>
+                <FontAwesomeIconView fx:id="hamburger_icon" fill="WHITE" glyphName="BARS" size="25" textAlignment="CENTER" wrappingWidth="40.0" />
+            </graphic>
+            <padding>
+                <Insets bottom="15.0" left="5.0" right="20.0" top="15.0" />
+            </padding>
+            <font>
+                <Font name="System Bold" size="14.0" />
+            </font>
+            <VBox.margin>
+                <Insets />
+            </VBox.margin>
+        </JFXButton>
+
+        <JFXButton fx:id="patients_btn" alignment="TOP_LEFT" prefWidth="200.0" style="-fx-background-color: transparent; -fx-cursor: hand" text="Patients" textFill="WHITE" VBox.vgrow="NEVER">
+            <graphic>
+                <ImageView accessibleText="Patients" pickOnBounds="true" preserveRatio="true">
+                <image>
+                    <Image url="@../img/patients.png" />
+                </image>
+                </ImageView>
+            </graphic>
+         <padding>
+            <Insets bottom="15.0" left="5.0" right="20.0" top="15.0" />
+         </padding>
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+         <VBox.margin>
+            <Insets />
+         </VBox.margin>
+        </JFXButton>
+
+        <JFXButton fx:id="agenda_btn" alignment="TOP_LEFT" prefWidth="200.0" style="-fx-background-color: transparent; -fx-cursor: hand" text="Agenda" textFill="WHITE" VBox.vgrow="NEVER">
+            <graphic>
+                <ImageView accessibleText="Agenda" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../img/agenda_icon.png" />
+                    </image>
+                </ImageView>
+            </graphic>
+            <padding>
+                <Insets bottom="15.0" left="5.0" right="20.0" top="15.0" />
+            </padding>
+            <font>
+                <Font name="System Bold" size="14.0" />
+            </font>
+            <VBox.margin>
+                <Insets />
+            </VBox.margin>
+        </JFXButton>
+
+
+        <JFXButton fx:id="notifications_btn" alignment="TOP_LEFT" prefWidth="200.0" style="-fx-background-color: transparent; -fx-cursor: hand" text="Notifications" textFill="WHITE" VBox.vgrow="NEVER">
+            <graphic>
+                <FontAwesomeIconView fill="WHITE" glyphName="BELL" size="25" textAlignment="CENTER" wrappingWidth="40.0" />
+            </graphic>
+            <padding>
+                <Insets bottom="15.0" left="5.0" right="20.0" top="15.0" />
+            </padding>
+            <font>
+                <Font name="System Bold" size="14.0" />
+            </font>
+            <VBox.margin>
+                <Insets />
+            </VBox.margin>
+        </JFXButton>
+
+        <JFXButton fx:id="doctors_btn" alignment="TOP_LEFT" prefWidth="200.0" style="-fx-background-color: transparent; -fx-cursor: hand" text="Medecins" textFill="WHITE" VBox.vgrow="NEVER">
+            <graphic>
+                <ImageView accessibleText="Medecins" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../img/doctors.png" />
+                    </image>
+                </ImageView>
+            </graphic>
+            <padding>
+                <Insets bottom="15.0" left="5.0" right="20.0" top="15.0" />
+            </padding>
+            <font>
+                <Font name="System Bold" size="14.0" />
+            </font>
+         <VBox.margin>
+            <Insets />
+         </VBox.margin>
+        </JFXButton>
+
+        <JFXButton fx:id="settings_btn" alignment="TOP_LEFT" prefWidth="200.0" style="-fx-background-color: transparent; -fx-cursor: hand" text="Parametres" textFill="WHITE" VBox.vgrow="NEVER">
+            <graphic>
+                <FontAwesomeIconView fill="WHITE" glyphName="COG" size="25" textAlignment="CENTER" wrappingWidth="40.0" />
+            </graphic>
+            <padding>
+                <Insets bottom="15.0" left="5.0" right="20.0" top="15.0" />
+            </padding>
+            <font>
+                <Font name="System Bold" size="14.0" />
+            </font>
+         <VBox.margin>
+            <Insets />
+         </VBox.margin>
+        </JFXButton>
+
+
+
+        <JFXButton fx:id="logout_btn" alignment="TOP_LEFT" prefWidth="200.0" style="-fx-background-color: transparent; -fx-cursor: hand" text="Déconnecter" textFill="WHITE" VBox.vgrow="NEVER">
+            <graphic>
+                <ImageView accessibleText="Patients" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../img/logout.png" />
+                    </image>
+                </ImageView>
+            </graphic>
+            <padding>
+                <Insets bottom="15.0" left="5.0" right="20.0" top="15.0" />
+            </padding>
+            <font>
+                <Font name="System Bold" size="14.0" />
+            </font>
+            <VBox.margin>
+                <Insets />
+            </VBox.margin>
+        </JFXButton>
+    </VBox>
+
+
+    <VBox fx:id="content" HBox.hgrow="ALWAYS">
+
+    </VBox>
+
+
+</HBox>

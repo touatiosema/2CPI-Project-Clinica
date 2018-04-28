@@ -10,9 +10,17 @@ import java.util.Collections;
 public class Bilan {
 
     private ArrayList<Examen> ficheBilan;
+    private int consultationId;
+
+    public void setConsultationId(int id) {
+        consultationId = id;
+    }
+
     public Bilan(){
         ficheBilan = new ArrayList<Examen>();
     }
+
+    public Bilan(ArrayList<Examen> exams) { ficheBilan = exams; }
 
     public void afficher(){
         for(Examen str: ficheBilan){
@@ -28,6 +36,11 @@ public class Bilan {
         ficheBilan.add(exam);
     }
 
+    public static Bilan getBilanById(int id) {
+        Bilan b = new Bilan();
+        return b.getBilan(id);
+    }
+
     public Bilan getBilan(int idConsultation){
 
         Bilan bilan = new Bilan();
@@ -40,8 +53,7 @@ public class Bilan {
 
 
                 if(resultSet2.next()){
-                    Examen examen = new Examen(resultSet2.getString("examen"),
-                            resultSet2.getString("typeExamen"));
+                    Examen examen = new Examen(resultSet2.getInt("id"), resultSet2.getString("examen"));
                     bilan.addBilan(examen);
                 }
             }
@@ -52,7 +64,17 @@ public class Bilan {
         }
     }
 
+    public void save() {
+        for (Examen exam: ficheBilan) {
+            DB.query("INSERT INTO EXAMS_CONSULTATION(ID_EXAMEN, ID_CONSULTATION) VALUES(?, ?)", exam.getId(), consultationId);
+        }
+    }
+
+
+    // PLEASE DO NOT USE THIS METHOD
     public void saveBilan(int idConsultation, ArrayList<Examen> bilan) throws NullPointerException {
+
+
         ResultSet resultSet;
         //Connection connection = DB.getConnection();
         ResultSet resultSet1;

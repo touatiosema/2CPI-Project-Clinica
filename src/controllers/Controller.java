@@ -10,8 +10,8 @@ public abstract class Controller {
     protected int height = 450;
     protected int min_width = 0;
     protected int min_height = 0;
-    protected int max_width = Integer.MAX_VALUE;
-    protected int max_height = Integer.MAX_VALUE;
+    protected int max_width = Integer.MAX_VALUE - 200;
+    protected int max_height = Integer.MAX_VALUE - 200;
     protected Stage window;
 
     public Stage getWindow() {

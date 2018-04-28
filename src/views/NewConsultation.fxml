@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXTextArea?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox  stylesheets="@../assets/font.css" prefHeight="550" prefWidth="400.0" spacing="25.0" style="-fx-background-color: #309bd1" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.NewConsultationController">
+
+    <VBox>
+        <Label text="Poids : " textFill="WHITE">
+            <font>
+                <Font name="System Bold" size="12.0" />
+            </font></Label>
+        <JFXTextField fx:id="poids_field" focusColor="WHITE" style="-fx-text-fill: white;" unFocusColor="#ffffff4d" />
+    </VBox>
+
+    <VBox>
+        <Label text="Motif :" textFill="WHITE">
+            <font>
+                <Font name="System Bold" size="12.0" />
+            </font></Label>
+        <JFXTextArea fx:id="motif_field" focusColor="WHITE" style="-fx-text-fill: white;" unFocusColor="#ffffff4d" />
+    </VBox>
+
+    <VBox>
+        <Label text="Examen clinique :" textFill="WHITE">
+            <font>
+                <Font name="System Bold" size="12.0" />
+            </font></Label>
+        <JFXTextArea fx:id="exam_clinic_field" focusColor="WHITE" style="-fx-text-fill: white;" unFocusColor="#ffffff4d" />
+    </VBox>
+
+    <VBox>
+        <Label text="Examen supplementaire :" textFill="WHITE">
+            <font>
+                <Font name="System Bold" size="12.0" />
+            </font></Label>
+        <JFXTextArea fx:id="exam_supp_field" focusColor="WHITE" style="-fx-text-fill: white;" unFocusColor="#ffffff4d" />
+    </VBox>
+
+    <VBox>
+        <Label text="Diagnostique :" textFill="WHITE">
+            <font>
+                <Font name="System Bold" size="12.0" />
+            </font></Label>
+        <JFXTextArea fx:id="diagnostique_field" focusColor="WHITE" style="-fx-text-fill: white;" unFocusColor="#ffffff4d" />
+
+    </VBox>
+
+    <HBox spacing="5">
+        <JFXButton fx:id="save_btn" alignment="TOP_CENTER" style="-fx-background-color: #186d97;" text="Sauvgarder" textFill="WHITE">
+            <graphic>
+                <FontAwesomeIconView fill="WHITE" glyphName="SAVE" />
+            </graphic>
+         <padding>
+            <Insets bottom="7.0" left="7.0" right="7.0" top="7.0" />
+         </padding></JFXButton>
+    </HBox>
+   <padding>
+      <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+   </padding>
+</VBox>

@@ -2,8 +2,10 @@ package core;
 
 import models.Medecin;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
@@ -19,9 +21,25 @@ public class Setup {
     }
 
     public static void setup_database() {
-        try {
             new File(System.getProperty("user.home") + "/" + App.app_foldername).mkdir();
-            String sql = new String(Files.readAllBytes(Paths.get("src/assets/migration.sql")));
+
+            String sql = "";
+
+            try (InputStreamReader instream = new InputStreamReader(App.getApp().getClass().getResourceAsStream("/assets/migration.sql"));
+                 BufferedReader buffer = new BufferedReader(instream)) {
+
+
+
+                String line;
+                while ((line = buffer.readLine()) != null) {
+                    sql += line;
+                }
+            }
+
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+
             String[] commands = sql.split(";");
 
             DB.start(true);
@@ -29,11 +47,7 @@ public class Setup {
             for (String cmd: commands) {
                 DB.query(cmd);
             }
-        }
 
-        catch (IOException e) {
-            System.out.println("Setup database failed.. opening sql file");
-        }
     }
 
     public static void setup_admin() {

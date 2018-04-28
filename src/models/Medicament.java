@@ -68,6 +68,13 @@ public class Medicament {
     public void afficher(){
         System.out.println("nom commercial: "+nomCommercial+" nom sien: "+nomSientifique+" type: "+type);
     }
+
+
+    public static Medicament getById(int id) {
+        Medicament med = new Medicament();
+        return med.getMedicament(id);
+    }
+
     //get medicament de la BDD, si
     public Medicament getMedicament(int idMedicament){
         Medicament medicament = new Medicament();
@@ -75,6 +82,7 @@ public class Medicament {
 
         try{
             if(resultSet.next()){
+                medicament.setId(resultSet.getInt("ID"));
                 medicament.setNomCommercial(resultSet.getString("NOM_COMMERCIAL"));
                 medicament.setType(resultSet.getString("TYPE"));
                 medicament.setNomSientifique(resultSet.getString("NOM_SCIENTIFIQUE"));
@@ -159,6 +167,24 @@ public class Medicament {
                                     resultSet.getString("nom_commercial"),
                                     resultSet.getString("nom_scientifique"),
                                     resultSet.getString("type")));
+            }
+        }catch (SQLException e){
+            System.out.println("Modicament: getAllMedicament: "+e.getCause()+'\n'+e.getStackTrace());
+        }
+        return medicaments;
+    }
+
+    public static ArrayList<Medicament> search(String med){
+        med = med.toLowerCase();
+        ArrayList<Medicament> medicaments = new ArrayList<>();
+        ResultSet resultSet = DB.query("SELECT * from MEDICAMENT WHERE lower(nom_commercial) LIKE '"+med+"%' OR lower(nom_scientifique) LIKE '"+med+"%' OR lower(type) LIKE '"+med+"%'");
+        try{
+            while (resultSet.next()){
+                medicaments.add(new Medicament(
+                        resultSet.getInt("id"),
+                        resultSet.getString("nom_commercial"),
+                        resultSet.getString("nom_scientifique"),
+                        resultSet.getString("type")));
             }
         }catch (SQLException e){
             System.out.println("Modicament: getAllMedicament: "+e.getCause()+'\n'+e.getStackTrace());

@@ -1,7 +1,13 @@
 package controllers;
+import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXComboBox;
+import com.jfoenix.controls.JFXDatePicker;
+import com.jfoenix.controls.JFXTextField;
 import core.App;
 import core.Auth;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -16,11 +22,9 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import models.Agenda;
-import models.LigneEnagenda;
-import models.Medicament;
-import utils.ActionButton;
 
-import java.beans.EventHandler;
+
+import utils.ActionButton;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -28,80 +32,64 @@ import java.util.HashMap;
 
 
 public class AgendaController extends Controller{
-    private ArrayList<LigneEnagenda> agenda;
+    private ArrayList<Agenda> agenda;
     private Stage stage;
     private int id;
 
     @FXML
-    TableView<LigneEnagenda> table;
+    TableView<Agenda> table;
     @FXML
-    TableColumn<LigneEnagenda, String> columntypeRDV;
+    TableColumn<Agenda, String> columntypeRDV;
     @FXML
-    TableColumn<LigneEnagenda, String> columnpatient;
+    TableColumn<Agenda, String> columnpatient;
     @FXML
-    TableColumn<LigneEnagenda, String> columnheure;
+    TableColumn<Agenda, String> columnheure;
     @FXML
-    TableColumn<LigneEnagenda, String> columndate;
+    TableColumn<Agenda, String> columndate;
     @FXML
-    TableColumn<LigneEnagenda, String> columnRemarque;
-    TableColumn<LigneEnagenda, Void> columnOperation;
+    TableColumn<Agenda, String> columnRemarque;
+    TableColumn<Agenda, Void> columnOperation;
     @FXML
-    Button buttonaffpro;
+    JFXDatePicker ddate;
+
     @FXML
-    Button buttonaffpers;
+    JFXButton add_btn;
+
     @FXML
-    DatePicker ddate;
-    @FXML
-    private  Button okk;
-    @FXML
-    ChoiceBox ajouterRdv;
-    @FXML
-    TextField searchText;
-    @FXML
-    Button btnShow;
+    JFXTextField searchText;
+
     Date jour;
-    private ObservableList<LigneEnagenda> rdvList;
-    private FilteredList<LigneEnagenda> filteredList;
+    private ObservableList<Agenda> rdvList;
+    private FilteredList<Agenda> filteredList;
+
+    @FXML
+    JFXComboBox type_box;
 
 
     char prev;
 
     public AgendaController() {
-        min_width = width = max_height = 837;
-        min_height = height = max_height = 482;
+        min_width = width  = 820;
+        min_height = height = 550;
     }
 
     private void addActionsButton() {
         if (columnOperation != null)
             table.getColumns().removeAll(columnOperation);
-        columnOperation = new TableColumn<>("Modifier");
-        Callback<TableColumn<LigneEnagenda, Void>, TableCell<LigneEnagenda, Void>> cellFactory = new Callback<TableColumn<LigneEnagenda, Void>, TableCell<LigneEnagenda, Void>>() {
+        columnOperation = new TableColumn<>("");
+        Callback<TableColumn<Agenda, Void>, TableCell<Agenda, Void>> cellFactory = new Callback<TableColumn<Agenda, Void>, TableCell<Agenda, Void>>() {
             @Override
-            public TableCell<LigneEnagenda, Void> call(final TableColumn<LigneEnagenda, Void> param) {
-                final TableCell<LigneEnagenda, Void> cell = new TableCell<LigneEnagenda, Void>() {
+            public TableCell<Agenda, Void> call(final TableColumn<Agenda, Void> param) {
+                final TableCell<Agenda, Void> cell = new TableCell<Agenda, Void>() {
                     private Node create() {
                         HBox layout = new HBox();
-//                        LigneEnagenda medicament = this.getTableView().getItems().get(this.getIndex());
-                       // int id = this.getTableRow().getIndex();//this.getTableView().getItems().get(this.getIndex()).getId();
-                        //LigneEnagenda ligneEnagenda = this.getTableView().getItems().get()
                         int ligne = this.getIndex();
-//                        ActionButton deleteBtn;
-//                        deleteBtn = new ActionButton(this, "Supprimer", FontAwesomeIcon.CLOSE, "#B4302A") {
-//                            @Override
-//                            public void onAction(Object med) {
-//                                delete(id, ligne);
-//                            }
-//                        };
-
                         ActionButton modifieBtn = new ActionButton(this, "Supprimer", FontAwesomeIcon.TRASH, "#2c81a0" ){
                             @Override
                             public void onAction(Object med) {
                                 supp(ligne);
                             }
                         };
-
-
-
                         layout.getChildren().addAll(modifieBtn);
                         return layout;
                     }
@@ -123,78 +111,85 @@ public class AgendaController extends Controller{
         table.getColumns().add(columnOperation);
     }
 
-    public void modify(int i){
-        System.out.println("it's here: "+i);
-    }
     public void initialize(){
-        ajouterRdv.getItems().addAll("Personnelle", "Professionnel");
-        ajouterRdv.getSelectionModel().selectedItemProperty().addListener((v, ov, nv) -> {
-            AgendaController self = this;
-            if (v.getValue().equals("Professionnel") == true) {
-                App.newWindow("PatientRdv", new HashMap() {{
-                    put("main_window", self);
-                }})     ;
-            }
+        AgendaController self = this;
 
-            else {
-                App.newWindow("PersonRdv", new HashMap() {{
-                    put("main_window", self);
-                }});
-            }
-            addActionsButton();
-
+        add_btn.setOnAction(e -> {
+            App.newWindow("RDV", new HashMap() {{
+                put("main_window", self);
+                put("modify", false);
+                put("agenda", null);
+            }});
         });
 
-        okk.setOnAction(e -> getRdvdate());
-        btnShow.setOnAction(event->getData('a'));
-        buttonaffpro.setOnAction(e -> getData('F'));
-        buttonaffpers.setOnAction(e-> getData('P'));
+        ddate.getEditor().textProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.equals("")) {
+                ddate.setValue(null);
+            }
+        });
 
-        columntypeRDV.setCellValueFactory(new PropertyValueFactory<>("Type_de_RDV"));
-        columnpatient.setCellValueFactory(new PropertyValueFactory<>("Patient"));
-        columnheure.setCellValueFactory(new PropertyValueFactory<>("Heure"));
-        columndate.setCellValueFactory(new PropertyValueFactory<>("Date"));
-        columnRemarque.setCellValueFactory(new PropertyValueFactory<>("Remarques"));
+        ddate.setOnAction(e -> getRdvdate());
+
+        type_box.getItems().addAll("All", "Professionels", "Personels");
+        type_box.getSelectionModel().selectFirst();
+
+        type_box.getSelectionModel().selectedItemProperty().addListener((v, oldValue, NewValue) -> {
+            if (NewValue == "All") getData('a');
+            else if (NewValue == "Professionels") getData('F');
+            else getData('P');
+        });
+
+        columntypeRDV.setCellValueFactory(new PropertyValueFactory<>("type"));
+        columnpatient.setCellValueFactory(new PropertyValueFactory<>("patient"));
+        columnheure.setCellValueFactory(new PropertyValueFactory<>("heure"));
+        columndate.setCellValueFactory(new PropertyValueFactory<>("date"));
+        columnRemarque.setCellValueFactory(new PropertyValueFactory<>("description"));
+
         table.setOnMousePressed(event -> {
             if(event.getButton().equals(MouseButton.PRIMARY)){
                 if(event.getClickCount()==2){
-                    System.out.println(table.getSelectionModel().getSelectedIndex());
-                    modify(1);
+                    modify(table.getSelectionModel().getSelectedIndex());
                 }
             }
-
         });
 
         getData('a');
         addActionsButton();
     }
-
     public void refresh() {
-        //rdvList.removeAll();
         getData('a');
     }
 
 
-    private void ajouter(){}
-
-
-        public ObservableList<LigneEnagenda> getRdvPersonel () {
-            ObservableList<LigneEnagenda> obs = FXCollections.observableArrayList();
-            obs.addAll(Agenda.getRdvPersonel(Auth.getUserID()));
-            return obs;
-        }
-    public void affichpers() {
-
+    public void modify(int i){
+        AgendaController self  = this;
+        Agenda agenda = table.getItems().get(i);
+        App.newWindow("RDV", new HashMap() {{
+                put("main_window", self);
+                put("modify", true);
+                put("agenda", agenda);
+        }});
     }
 
-    public ObservableList<LigneEnagenda> getRdvProfessionnel () {
-            ObservableList<LigneEnagenda> obs = FXCollections.observableArrayList();
-            obs.addAll(Agenda.getRdvProfessionnel());
+
+
+        public ObservableList<Agenda> getRdvPersonel () {
+            ObservableList<Agenda> obs = FXCollections.observableArrayList();
+            obs.addAll( Agenda.getRdvPersonel(Auth.getUserID()));
             return obs;
         }
+
+    public ObservableList<Agenda> getRdvProfessionnel () {
+            ObservableList<Agenda> obs = FXCollections.observableArrayList();
+            obs.addAll(Agenda.getRdvProfessionnel(Auth.getUserID()));
+            return obs;
+        }
+
     public void getData(char c) {
         prev = c;
-        if (rdvList != null) rdvList.removeAll(rdvList);
+        if (rdvList != null) {
+            rdvList.removeAll();
+        }
         if (c == 'P')
             rdvList = getRdvPersonel();
         else if (c == 'F')
@@ -205,57 +200,63 @@ public class AgendaController extends Controller{
         }
         wrapListAndAddFiltering();
     }
+
     public void wrapListAndAddFiltering(){
         filteredList = new FilteredList<>(rdvList, p -> true);
         searchText.textProperty().addListener((observable, oldValue, newValue) -> {
-            filteredList.setPredicate(ligneEnagenda -> {
+            filteredList.setPredicate(agenda -> {
                 if (newValue == null || newValue.isEmpty()) {
                     return true;
                 }
                 String lowercaseFilter = newValue.toLowerCase();
-                if (ligneEnagenda.getType_de_RDV().toLowerCase().contains(lowercaseFilter))
+                if (agenda.getType().toLowerCase().contains(lowercaseFilter))
                     return true;
-                else if (ligneEnagenda.getPatient()!=null&&ligneEnagenda.getPatient().toLowerCase().contains(lowercaseFilter))
+                else if (agenda.getPatient()!=null&&agenda.getPatient().toLowerCase().contains(lowercaseFilter))
                     return true;
-                else if (ligneEnagenda.getDate()!=null&&ligneEnagenda.getDate().toLowerCase().contains(lowercaseFilter))
+                else if (agenda.getDate()!=null&&agenda.getDate().toString().toLowerCase().contains(lowercaseFilter))
                     return true;
-                else if (ligneEnagenda.getHeure()!=null&&ligneEnagenda.getHeure().toLowerCase().contains(lowercaseFilter))
+                else if (agenda.getHeure()!=null&&agenda.getHeure().toString().toLowerCase().contains(lowercaseFilter))
                     return true;
-                else if (ligneEnagenda.getRemarques()!=null&&ligneEnagenda.getRemarques().toLowerCase().contains(lowercaseFilter))
+                else if (agenda.getDescription()!=null&&agenda.getDescription().toLowerCase().contains(lowercaseFilter))
                     return true;
                 return false;
             });
         });
 
-        SortedList<LigneEnagenda> sortedList = new SortedList<>(filteredList);
+        SortedList<Agenda> sortedList = new SortedList<>(filteredList);
         sortedList.comparatorProperty().bind(table.comparatorProperty());
         table.setItems(sortedList);
 
     }
 
-    public ObservableList<LigneEnagenda> getRdvdate () {
-         LocalDate ddd = ddate.getValue();
+    public ObservableList<Agenda> getRdvdate () {
+            if (ddate.getValue() == null) {
+               if ( type_box.getSelectionModel().selectedItemProperty().getValue().equals("Personel") ){
+                   getData('P');
+               }
 
-            if (ddd == null) return null;
+               else if (type_box.getSelectionModel().selectedItemProperty().getValue().equals("All")) {
+                   getData('a');
+               }
 
-                    jour  = java.sql.Date.valueOf(ddd);
+               else {
+                   getData('F');
+               }
 
-            ObservableList<LigneEnagenda> obs = FXCollections.observableArrayList();
+               return null;
+            }
+
+
+            jour  =Date.valueOf(ddate.getValue());
+            ObservableList<Agenda> obs = FXCollections.observableArrayList();
             obs.addAll(Agenda.getRdvdate(Auth.getUserID(), jour));
             table.setItems(obs);
             return obs;
         }
-    public void affichrdv() {
-
-    }
-
-
 
     public void supp(int id) {
-        LigneEnagenda ligneEnagenda=table.getItems().get(id);
-        LigneEnagenda.supprimer(ligneEnagenda.getId());
+        Agenda.supprimer(table.getItems().get(id).getId());
         rdvList.remove(id);
-        //filteredList.remove(id);
         wrapListAndAddFiltering();
     }
 }

@@ -1,5 +1,10 @@
 package controllers;
 
+import com.jfoenix.controls.JFXComboBox;
+import com.jfoenix.controls.JFXDatePicker;
+import com.jfoenix.controls.JFXPasswordField;
+import com.jfoenix.controls.JFXTextField;
+import core.Auth;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import models.Medecin;
@@ -11,60 +16,71 @@ import java.util.HashMap;
 
 public class EditAccountController extends Controller {
     private int medecin_id;
-    private ManageAccountsController main_window;
+    private ManageAccountsController main_window = null;
 
     @FXML
-    TextField username_f;
+    JFXTextField username_f;
 
     @FXML
-    PasswordField password_f;
+    JFXTextField password_f;
 
     @FXML
-    TextField nom_f;
+    JFXTextField nom_f;
 
     @FXML
-    TextField prenom_f;
+    JFXTextField prenom_f;
 
     @FXML
-    TextField adresse_f;
+    JFXTextField adresse_f;
 
     @FXML
-    TextField telephone_f;
+    JFXTextField telephone_f;
 
     @FXML
-    ChoiceBox genre_f;
+    JFXComboBox genre_f;
 
     @FXML
-    DatePicker birthdate_f;
+    JFXDatePicker birthdate_f;
 
     @FXML
     Label alert_lab;
 
     public EditAccountController() {
         title = "Modifier Compte";
-        min_width = width = max_width = 350;
-        min_height = height = max_height = 350;
+        min_width = width = max_width = 400;
+        min_height = height = max_height = 560;
     }
 
     public void init(HashMap args) {
+        if (args.containsKey("main_window"))
         main_window = (ManageAccountsController) args.get("main_window");
+        boolean modify = (boolean) args.get("modify");
 
         genre_f.getItems().setAll("M", "F");
         genre_f.setValue("M");
 
-        medecin_id = (Integer) args.get("id");
-        Medecin medecin = new Medecin(medecin_id);
+        if (modify) {
+            medecin_id = (Integer) args.get("id");
+            Medecin medecin = new Medecin(medecin_id);
+            genre_f.setValue(medecin.getGenre() + "");
+            username_f.setText(medecin.getUsername());
+            password_f.setText(medecin.getPassword());
+            nom_f.setText(medecin.getNom());
+            prenom_f.setText(medecin.getPrenom());
+            adresse_f.setText(medecin.getAddress());
+            telephone_f.setText(medecin.getTelephone());
+            genre_f.setValue(medecin.getGenre());
+            birthdate_f.setValue(medecin.getDateDeNaissance().toLocalDate());
 
-        genre_f.getItems().setAll("M", "F");
-        genre_f.setValue(medecin.getGenre() + "");
-        username_f.setText(medecin.getUsername());
-        password_f.setText(medecin.getPassword());
-        nom_f.setText(medecin.getNom());
-        prenom_f.setText(medecin.getPrenom());
-        adresse_f.setText(medecin.getAddress());
-        telephone_f.setText(medecin.getTelephone());
-        genre_f.setValue(medecin.getGenre());
-        birthdate_f.setValue(medecin.getDateDeNaissance().toLocalDate());
+            if (!Auth.isAdmin()) {
+                genre_f.setDisable(true);
+                nom_f.setDisable(true);
+                prenom_f.setDisable(true);
+                adresse_f.setDisable(true);
+                telephone_f.setDisable(true);
+                birthdate_f.setDisable(true);
+            }
+        }
     }
 
     public void save() {
@@ -77,7 +93,14 @@ public class EditAccountController extends Controller {
         String genre = "" + genre_f.getValue();
         LocalDate birthdate = birthdate_f.getValue();
 
-        Medecin medecin = new Medecin(medecin_id);
+        Medecin medecin;
+        if (medecin_id !=0) {
+             medecin = new Medecin(medecin_id);
+        }
+
+        else {
+            medecin = new Medecin();
+        }
 
 
         if (username == null || username.equals("")) {
@@ -127,13 +150,26 @@ public class EditAccountController extends Controller {
         }
 
 
-        medecin = new Medecin(medecin_id, medecin.getId_personne(), username, password, true, nom, prenom, adresse, telephone, genre.charAt(0), Date.valueOf(birthdate));
-        medecin.save();
+        if (medecin_id != 0) {
+            medecin = new Medecin(medecin_id, medecin.getId_personne(), username, password, true, nom, prenom, adresse, telephone, genre.charAt(0), Date.valueOf(birthdate));
+            medecin.save();
 
-        Personne person = new Personne(medecin.getId_personne(), nom, prenom, adresse, telephone, genre.charAt(0), Date.valueOf(birthdate));
-        person.save();
+            Personne person = new Personne(medecin.getId_personne(), nom, prenom, adresse, telephone, genre.charAt(0), Date.valueOf(birthdate));
+            person.save();
+        }
 
-        main_window.update();
+        else {
+            Personne person = new Personne(0, nom, prenom, adresse, telephone, genre.charAt(0), Date.valueOf(birthdate));
+            person.save();
+
+            medecin = new Medecin(0, person.getId(), username, password, true, nom, prenom, adresse, telephone, genre.charAt(0), Date.valueOf(birthdate));
+            medecin.save();
+
+        }
+
+        if (main_window != null)
+            main_window.update();
+        getWindow().close();
     }
 
     private void alert(String msg) {

@@ -1,6 +1,8 @@
 package controllers;
 
+import com.jfoenix.controls.JFXComboBox;
 import core.App;
+import core.Auth;
 import core.Setup;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -11,6 +13,7 @@ import utils.Timer;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
 public class AdminSetupController extends Controller {
@@ -34,7 +37,7 @@ public class AdminSetupController extends Controller {
     TextField telephone_f;
 
     @FXML
-    ChoiceBox genre_f;
+    JFXComboBox genre_f;
 
     @FXML
     DatePicker birthdate_f;
@@ -45,7 +48,7 @@ public class AdminSetupController extends Controller {
     public AdminSetupController() {
         title = "Compte administrateur";
         min_width = width = max_width = 350;
-        min_height = height = max_height = 350;
+        min_height = height = max_height = 520;
     }
 
     public void initialize() {
@@ -117,7 +120,17 @@ public class AdminSetupController extends Controller {
         Medecin medecin = new Medecin(0, person.getId(), username, password, true, nom, prenom, adresse, telephone, g, Date.valueOf(birthdate));
         medecin.save();
 
-        App.setView(App.entry);
+        try {
+            Auth.login(username, password);
+        }
+
+        catch (Throwable e) {
+            System.out.println("Could not sign the admin in");
+        }
+
+        App.setView("CabinetSetup", new HashMap() {{
+            put("isSetup", true);
+        }});
 
     }
 

@@ -8,6 +8,14 @@ CREATE TABLE  personne(
     dateDeNaissance DATE
 );
 
+CREATE TABLE Config(
+    id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
+    config_key VARCHAR(50),
+	  config_value VARCHAR(50)
+);
+
+
+
 
 
 
@@ -42,7 +50,8 @@ CREATE TABLE agenda(
     time time,
     patient VARCHAR(50),
     description VARCHAR(200),
-    type CHAR
+    type CHAR,
+    remindingtime int
 );
 
 

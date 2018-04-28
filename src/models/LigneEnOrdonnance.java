@@ -10,6 +10,7 @@ public class LigneEnOrdonnance {
     private String dose;
     private String details;
 
+
     public Medicament getMedicament(){
         return medicament;
     }
@@ -84,7 +85,7 @@ public class LigneEnOrdonnance {
         int tmplignID;
         try {
             //preparedStatement = connection.prepareStatement("insert into LIGNE_ORDONNANCE(ID_MEDICAMENT," +
-            DB.query("insert into LIGNE_ORDONNANCE(ID_MEDICAMENT,DETAIL,DOSE) values(?,?,?) ", medicament.getId(), details, dose);
+            DB.query("insert into LIGNE_ORDONNANCE(ID_MEDICAMENT,DETAIL,DOZE) values(?,?,?) ", medicament.getId(), details, dose);
             resultSet1 = DB.query("select id from ligne_ordonnance order by id desc");
             if(resultSet1.next()) {
                 tmplignID = resultSet1.getInt("id");

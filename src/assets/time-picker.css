@@ -1,0 +1,10 @@
+.jfx-time-picker .input-line {
+    -fx-background-color: #ffffff40;
+    -fx-fill: white;
+}
+
+.jfx-time-picker .text-field {
+    -jfx-unfocus-color: white;
+    -fx-prompt-text-fill: white;
+    -fx-text-fill: white;
+}

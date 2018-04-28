@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXDatePicker?>
+<?import com.jfoenix.controls.JFXTextArea?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import com.jfoenix.controls.JFXTimePicker?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox  stylesheets="@../assets/font.css" prefHeight="500.0" prefWidth="350.0" spacing="20" style="-fx-background-color: linear-gradient(#309bd1 50%, #2e81b4 100%);" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.RDVController">
+
+    <VBox>
+        <Label text="Type :" textFill="WHITE">
+            <font>
+                <Font name="System Bold" size="12.0" />
+            </font></Label>
+        <JFXComboBox fx:id="type" focusColor="WHITE" prefWidth="313.0" stylesheets="@../assets/combo-box.css" unFocusColor="#ffffff40" GridPane.columnIndex="1" />
+    </VBox>
+
+    <VBox fx:id="root">
+        <VBox fx:id="name_container">
+            <Label text="Patient :" textFill="WHITE">
+                <font>
+                    <Font name="System Bold" size="12.0" />
+                </font></Label>
+            <JFXTextField fx:id="name" focusColor="WHITE" style="-fx-text-fill: white;" unFocusColor="#ffffff40" GridPane.columnIndex="1" />
+        </VBox>
+
+    </VBox>
+
+
+    <VBox>
+        <Label text="Date :" textFill="WHITE">
+            <font>
+                <Font name="System Bold" size="12.0" />
+            </font></Label>
+        <JFXDatePicker fx:id="date" defaultColor="#186d97" prefHeight="25.0" prefWidth="310.0" stylesheets="@../assets/date-picker.css">
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets></JFXDatePicker>
+    </VBox>
+
+    <VBox>
+        <Label text="Heure :" textFill="WHITE">
+            <font>
+                <Font name="System Bold" size="12.0" />
+            </font></Label>
+        <JFXTimePicker fx:id="heure" defaultColor="#186d97" stylesheets="@../assets/time-picker.css"  prefHeight="25.0" prefWidth="313.0"/>
+    </VBox>
+
+    <VBox>
+        <Label text="Rappel avant :" textFill="WHITE">
+            <font>
+                <Font name="System Bold" size="12.0" />
+            </font></Label>
+
+        <HBox>
+            <JFXTextField fx:id="notification_time" focusColor="WHITE" style="-fx-text-fill: white;" unFocusColor="#ffffff40" HBox.hgrow="ALWAYS" />
+            <Label text="min" textFill="WHITE" HBox.hgrow="NEVER">
+                <padding>
+                    <Insets bottom="5" left="10" right="10" top="5" />
+                </padding>
+            </Label>
+        </HBox>
+    </VBox>
+
+
+    <VBox>
+        <Label layoutX="26.0" layoutY="249.0" text="Description :" textFill="WHITE">
+            <font>
+                <Font name="System Bold" size="12.0" />
+            </font></Label>
+        <JFXTextArea fx:id="description" focusColor="WHITE" layoutX="28.0" layoutY="273.0" prefHeight="104.0" prefWidth="310.0" style="-fx-text-fill: white;" unFocusColor="#ffffff40" />
+    </VBox>
+
+
+
+    <HBox alignment="TOP_RIGHT">
+        <JFXButton fx:id="Save" mnemonicParsing="false" onAction="#SaveRdv2" prefHeight="18.0" prefWidth="98.0" style="-fx-background-color: #186d97;" text="Sauvgarder" textFill="WHITE">
+            <graphic>
+                <FontAwesomeIconView fill="WHITE" glyphName="SAVE" />
+            </graphic>
+         <padding>
+            <Insets bottom="7.0" left="10.0" right="10.0" top="7.0" />
+         </padding>
+         <HBox.margin>
+            <Insets top="10.0" />
+         </HBox.margin>
+        </JFXButton>
+    </HBox>
+
+
+    <padding>
+        <Insets bottom="15.0" left="20.0" right="20.0" top="20.0" />
+    </padding>
+</VBox>

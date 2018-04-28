@@ -108,6 +108,38 @@ public class FicheDeConsultation implements Comparable<FicheDeConsultation>  {
 
     public FicheDeConsultation(){}
 
+    public FicheDeConsultation(int id) {
+        ResultSet q = DB.query("select * from CONSULTATIONS where id = ?", id);
+
+        try {
+            q.next();
+
+            this.id = q.getInt("id");
+            this.poids = q.getInt("poids");
+            this.motif = q.getString("motif");
+            this.examenClinique = q.getString("exam_clin");
+            this.examenSuppl = q.getString("exam_supl");
+            this.diagnostic = q.getString("diagnostic");
+            this.lettreDOrientation = q.getString("LETTRE_DORIENTATION");
+            this.certificat = q.getString("certificat");
+            this.date = q.getDate("date");
+            this.time = q.getTime("time");
+
+            q = DB.query("SELECT * FROM CONSULTAIONS_MEDECIN_PATIENT WHERE ID_CONSULTATION = ?", id);
+
+            q.next();
+
+            this.idPatient = q.getInt("id_patient");
+            this.idMedecin = q.getInt("id_medecin");
+
+
+        }
+
+        catch (SQLException e) {
+            System.out.println("[ERROR] While getting FicheDeConsultation by id");
+        }
+    }
+
     public FicheDeConsultation(int idPatient, int idMedecin, int poids, String motif, String examenClinique, String examenSuppl, String diagnostic, String lettreDOrientation, String certificat, Date date, Time time, Ordonnance ordonnance, Bilan ficheBilan) {
         this.idPatient = idPatient;
         this.idMedecin = idMedecin;
@@ -265,6 +297,21 @@ public class FicheDeConsultation implements Comparable<FicheDeConsultation>  {
     }
 
     public void saveConsultation(){
+
+        if (id > 0) {
+
+            ResultSet q = DB.query("UPDATE CONSULTATIONS SET POIDS = ?, MOTIF = ?, EXAM_CLIN = ?, EXAM_SUPL = ?, DIAGNOSTIC = ?, LETTRE_DORIENTATION = ?, CERTIFICAT = ?, DATE = '"+date+"', TIME = '"+time+"' WHERE id = ?",
+                    poids,
+                    motif,
+                    examenClinique,
+                    examenSuppl,
+                    diagnostic,
+                    lettreDOrientation,
+                    certificat,
+                    id);
+
+            return;
+        }
 
         //PreparedStatement preparedStatement;
         //Connection connection = DB.getConnection();

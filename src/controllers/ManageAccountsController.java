@@ -1,5 +1,7 @@
 package controllers;
 
+import com.jfoenix.controls.JFXCheckBox;
+import com.jfoenix.controls.JFXTextField;
 import core.App;
 import core.Auth;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
@@ -26,38 +28,26 @@ public class ManageAccountsController extends Controller {
     @FXML
     TableView users_table;
 
-    @FXML
-    TextField search_nom;
-
-    @FXML
-    TextField search_prenom;
-
-    @FXML
-    TextField search_username;
-
-    @FXML
-    CheckBox search_deactivated;
-
     TableColumn<Medecin, Void> col_btn;
 
     @FXML
-    MenuItem menu_new;
+    TableColumn username_col;
 
     @FXML
-    MenuItem menu_profile;
+    TableColumn nom_col;
 
     @FXML
-    MenuItem menu_edit;
+    TableColumn prenom_col;
 
     @FXML
-    MenuItem menu_activation;
+    JFXTextField search;
 
     @FXML
-    MenuItem menu_logout;
+    JFXCheckBox search_deactivated;
 
     public ManageAccountsController() {
-        width = min_width = 600;
-        width = min_height = 400;
+        width = min_width = 800;
+        width = min_height = 600;
         title = "Gestion des comptes";
     }
 
@@ -67,9 +57,7 @@ public class ManageAccountsController extends Controller {
 
     public void init() {
         search_deactivated.setOnAction((e) -> update());
-        search_nom.textProperty().addListener((v, oldValue, NewValue) -> update());
-        search_prenom.textProperty().addListener((v, oldValue, NewValue) -> update());
-        search_username.textProperty().addListener((v, oldValue, NewValue) -> update());
+        search.textProperty().addListener((v, oldValue, NewValue) -> update());
 
         users_table.setRowFactory( tv -> {
             TableRow<Medecin> row = new TableRow<Medecin>();
@@ -77,72 +65,21 @@ public class ManageAccountsController extends Controller {
             row.setOnMouseClicked(event -> {
                 if (event.getClickCount() == 2 && !row.isEmpty()) {
                     Medecin medecin = row.getItem();
-                    showMedecin(medecin);
+                    editMedecin(medecin);
                 }
             });
 
             return row;
         });
 
-        users_table.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                changeMenuState(users_table.getSelectionModel().getSelectedItem() != null);
-            }
-        });
-
-        users_table.focusedProperty().addListener(new ChangeListener<Boolean>()
-        {
-            @Override
-            public void changed(ObservableValue<? extends Boolean> arg0, Boolean oldPropertyValue, Boolean newPropertyValue)
-            {
-                Medecin selected_user;
-
-                if (newPropertyValue)
-                {
-                    selected_user = (Medecin) users_table.getSelectionModel().getSelectedItem();
-                }
-                else
-                {
-                    selected_user = null;
-                }
-
-                changeMenuState(selected_user != null);
-            }
-        });
-
         addActionsButtons();
 
-        menu_new.setOnAction(e -> newMedecin());
-        menu_profile.setOnAction(e -> showMedecin((Medecin) users_table.getSelectionModel().getSelectedItem()));
-        menu_edit.setOnAction(e -> editMedecin((Medecin) users_table.getSelectionModel().getSelectedItem()));
-        menu_activation.setOnAction(e -> activationMedecin((Medecin) users_table.getSelectionModel().getSelectedItem()));
-        menu_logout.setOnAction(e -> App.logout());
+
+
+
+//        menu_settings.setOnAction(e -> App.newWindow("CabinetSetup", new HashMap() {{ put("isSetup", false); }}));
 
         update();
-    }
-
-    private void changeMenuState(boolean enabled) {
-        if (enabled == false) {
-            menu_profile.setDisable(true);
-            menu_edit.setDisable(true);
-            menu_activation.setDisable(true);
-        }
-
-        else {
-            menu_profile.setDisable(false);
-            menu_edit.setDisable(false);
-            menu_activation.setDisable(false);
-
-            Medecin medecin = (Medecin) users_table.getSelectionModel().getSelectedItem();
-
-            if (medecin.isActive()) menu_activation.setText("Désactiver");
-            else menu_activation.setText("Activer");
-
-            if (medecin.isAdmin()) {
-                menu_activation.setDisable(true);
-            }
-        }
     }
 
     private void addActionsButtons() {
@@ -184,13 +121,6 @@ public class ManageAccountsController extends Controller {
                         }
 
 
-                        ActionButton show_btn = new ActionButton(this, "Profile", FontAwesomeIcon.EYE, "#2c81a0") {
-                            @Override
-                            public void onAction(Object medecin) {
-                                showMedecin((Medecin) medecin);
-                            }
-                        };
-
                         ActionButton edit_btn = new ActionButton(this, "Modifier", FontAwesomeIcon.PENCIL, "#672ca0") {
                             @Override
                             public void onAction(Object medecin) {
@@ -200,7 +130,7 @@ public class ManageAccountsController extends Controller {
 
 
 
-                        layout.getChildren().addAll(show_btn, edit_btn);
+                        layout.getChildren().addAll(edit_btn);
                         if (!medecin.isAdmin()) layout.getChildren().add(deactivate_btn);
 
                         return layout;
@@ -223,15 +153,19 @@ public class ManageAccountsController extends Controller {
 
         col_btn.setCellFactory(cellFactory);
         users_table.getColumns().add(col_btn);
+
+        col_btn.setResizable(false);
+
+        col_btn.prefWidthProperty().bind(
+                users_table.widthProperty()
+                        .subtract(nom_col.widthProperty())
+                        .subtract(prenom_col.widthProperty())
+                        .subtract(username_col.widthProperty())
+                        .subtract(2)  // a border stroke?
+        );
+
     }
 
-    private void showMedecin(Medecin medecin) {
-        Controller self = this;
-        App.newWindow("ShowAccount", new HashMap() {{
-            put("id", medecin.getId());
-            put("main_window", self);
-        }});
-    }
 
     private void activationMedecin(Medecin medecin) {
         medecin.setActive(!medecin.isActive());
@@ -239,11 +173,12 @@ public class ManageAccountsController extends Controller {
         update();
     }
 
-    private void newMedecin() {
+    public void newMedecin() {
         Controller self = this;
 
-        App.newWindow("NewAccount", new HashMap() {{
+        App.newWindow("EditAccount", new HashMap() {{
             put("main_window", self);
+            put("modify", false);
         }});
     }
 
@@ -252,20 +187,16 @@ public class ManageAccountsController extends Controller {
         App.newWindow("EditAccount", new HashMap() {{
             put("id", medecin.getId());
             put("main_window", self);
+            put("modify", true);
         }});
     }
 
     public void update() {
-        String nom_text = search_nom.getText();
-        String prenom_text = search_prenom.getText();
-        String username_text = search_username.getText();
+        String s = search.getText();
         boolean status = search_deactivated.isSelected();
 
-        if (nom_text == null) nom_text = "";
-        if (prenom_text == null) prenom_text = "";
-        if (username_text == null) username_text = "";
-
-        ArrayList<Medecin> users = Medecin.search(nom_text, prenom_text, username_text, status);
+        if (s == null) s = "";
+        ArrayList<Medecin> users = Medecin.search(s, status);
         ObservableList<Medecin> observableUsers = FXCollections.observableArrayList();
         observableUsers.addAll(users);
 

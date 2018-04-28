@@ -147,33 +147,15 @@ public class Medecin extends Personne{
 
 
     public static ArrayList<Medecin> all() {
-        return search("", "", "", true);
+        return search("",true);
     }
 
-    public static ArrayList<Medecin> search(String nom, String prenom, String username, boolean show_disabled) {
+    public static ArrayList<Medecin> search(String s, boolean show_disabled) {
         ArrayList<Medecin> list = new ArrayList<Medecin>();
 
-        String sql = "";
-        if (nom.length() > 0) sql += "nom LIKE \'" + nom + "%\' ";
+        s = s.toLowerCase();
 
-        if (prenom.length() > 0) {
-            if (sql.length() > 0) sql += " AND ";
-            sql += "prenom LIKE \'" + prenom + "%\' ";
-        }
-
-        if (username.length() > 0) {
-            if (sql.length() > 0) sql += " AND ";
-            sql += "username LIKE \'" + username + "%\' ";
-        }
-
-        if (!show_disabled) {
-            if (sql.length() > 0) sql += " AND ";
-            sql += "active = true";
-        }
-
-        if (!nom.equals("") || !prenom.equals("") || !username.equals("") || !show_disabled) sql = " WHERE " + sql;
-
-        ResultSet result = DB.query("SELECT * FROM MEDECIN JOIN PERSONNE ON MEDECIN.ID_PERSONNE = PERSONNE.ID" + sql);
+        ResultSet result = DB.query("SELECT * FROM MEDECIN JOIN PERSONNE ON MEDECIN.ID_PERSONNE = PERSONNE.ID WHERE (lower(username) LIKE '"+s+"%' OR lower(nom) LIKE '"+s+"%' OR lower(prenom) LIKE '"+s+"%') " + (!show_disabled ? "AND active = true" : ""));
 
         try {
             while (result.next()) {

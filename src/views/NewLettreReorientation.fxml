@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXTextArea?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox stylesheets="@../assets/font.css"  prefHeight="250.0" prefWidth="400.0" spacing="20.0" style="-fx-background-color: #309bd1" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.NewLettreReorientationController">
+
+    <Label text="Lettre de réorientation :" textFill="WHITE">
+      <font>
+         <Font name="System Bold" size="12.0" />
+      </font>
+      <VBox.margin>
+         <Insets />
+      </VBox.margin>
+      <graphic>
+         <FontAwesomeIconView fill="WHITE" glyphName="FILE" strokeType="OUTSIDE" strokeWidth="0.0" />
+      </graphic></Label>
+    <JFXTextArea fx:id="lettre_field" focusColor="WHITE" style="-fx-text-fill: white;" unFocusColor="#ffffff80" />
+
+        <HBox alignment="CENTER_RIGHT">
+            <JFXButton fx:id="save_btn" alignment="CENTER" style="-fx-background-color: #186d97;" text="Sauvgarder" textFill="WHITE">
+                <graphic>
+                    <FontAwesomeIconView fill="WHITE" glyphName="SAVE" strokeType="OUTSIDE" strokeWidth="0.0" />
+                </graphic>
+                <padding>
+                    <Insets bottom="7.0" left="7.0" right="7.0" top="7.0" />
+                </padding></JFXButton>
+        </HBox>
+   <padding>
+      <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+   </padding>
+
+</VBox>

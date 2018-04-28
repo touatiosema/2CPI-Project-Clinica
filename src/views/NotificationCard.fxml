@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox stylesheets="@../assets/font.css"  fx:id="anchorPane" prefWidth="400.0" spacing="10" style="-fx-background-color: #EEE; -fx-border-color: #CCC; -fx-border-width: 0 0 1px 0;" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.NotificationCardController">
+
+         <HBox spacing="50.0">
+            <children>
+               <HBox>
+                  <Label fx:id="type" text="TYPE" textFill="#1b1b1bc2">
+                     <font>
+                        <Font name="System Bold" size="13.0" />
+                     </font>
+                  </Label>
+                  <FontAwesomeIconView fill="#464646" glyphName="CLOCK_ALT">
+                     <HBox.margin>
+                        <Insets bottom="5.0" left="25.0" right="5.0" top="5.0" />
+                     </HBox.margin></FontAwesomeIconView>
+                  <Label fx:id="time" text="TIME" textFill="#1b1b1bc2">
+                     <font>
+                        <Font size="13.0" />
+                     </font>
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </Label>
+
+               </HBox>
+               <HBox alignment="TOP_RIGHT" HBox.hgrow="ALWAYS">
+
+                  <FontAwesomeIconView fx:id="close" fill="#464646" glyphName="CLOSE">
+               <HBox.margin>
+                  <Insets bottom="5.0" left="25.0" right="5.0" top="5.0" />
+               </HBox.margin></FontAwesomeIconView>
+               </HBox>
+            </children>
+         </HBox>
+         <Label fx:id="description" alignment="TOP_LEFT" prefWidth="375.0" text="TEXT" textFill="#1b1b1bc2" wrapText="true" VBox.vgrow="ALWAYS" />
+      <padding>
+         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+      </padding>
+
+</VBox>

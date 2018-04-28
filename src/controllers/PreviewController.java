@@ -1,6 +1,12 @@
 package controllers;
 
-import core.MyPrinter;
+import com.jfoenix.controls.JFXComboBox;
+import javafx.geometry.Insets;
+import javafx.geometry.Point2D;
+import javafx.scene.image.Image;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
+import utils.Print;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
@@ -10,77 +16,72 @@ import javafx.scene.Node;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.shape.Rectangle;
+
+import java.util.HashMap;
 
 
-
-public class PreviewController {
+public class PreviewController extends Controller{
     private Node node;
 
-    double initUp=18;
-    double initLeft=18;
-    double initRight=18;
-    double initDown=18;
-
-    private double widthRec=421;
-    private double heightRec=608;
-
-    private double marginUp=initUp;
-    private double marginDown=initDown;
-    private double marginLeft=initLeft;
-    private double marginRight=initRight;
-
-    double valueX=initLeft;
-    double valueY=initUp;
-
-
-
-
     @FXML
-    AnchorPane anchorPane;
+    VBox image_container;
+
     @FXML
     ImageView imageView;
     @FXML
-    ScrollPane scrollPane;
-    @FXML
     Button print;
-    @FXML
-    Rectangle rectangle;
+
     @FXML
     Button zoomIn;
     @FXML
     Button zoomOut;
     @FXML
-    ChoiceBox<String> choiceBox;
+    JFXComboBox<String> format;
     @FXML
-    ChoiceBox<String> choiceBox1;
+    JFXComboBox<String> direction;
     @FXML
-    ChoiceBox<String> choiceBox2;
+    JFXComboBox<String> margins_box;
     @FXML
     Button reset;
-    public void putNode(Node node){
-        this.node=node;
-        set();
+
+    double scale = 1;
+    int margin_index = 0;
+    double margin_x;
+    double margin_y;
+
+    Image img;
+
+    public PreviewController() {
+        title = "Apercue Avant Impression";
+        width = 480;
+        height = 650;
+    }
+
+    public void init(HashMap args) {
+        node = (Node) args.get("node");
+        img = node.snapshot(new SnapshotParameters(), null);
+        update();
     }
 
     public void initialize(){
-        reset();
+
         fillChoiceBox();
+
         print.setOnAction(event -> {
             Paper paper;
-            switch (choiceBox.getSelectionModel().getSelectedIndex()){
+            switch (format.getSelectionModel().getSelectedIndex()){
                 case 1:
                 paper=Paper.A4;
                 break;
                default:
                    paper=Paper.A5;
             }
+
             PageOrientation pagerOrientation;
-            switch (choiceBox1.getSelectionModel().getSelectedIndex()) {
+            switch (direction.getSelectionModel().getSelectedIndex()) {
                 case 1:
                     pagerOrientation = PageOrientation.LANDSCAPE;
                     break;
@@ -88,137 +89,110 @@ public class PreviewController {
                     pagerOrientation = PageOrientation.PORTRAIT;
             }
 
-            MyPrinter.print(imageView, marginUp, marginDown, marginLeft, marginRight, paper, pagerOrientation );
+            Print.print(node, margin_y, margin_y, margin_x, margin_x, paper, pagerOrientation );
+        ;
         });
 
-        reset.setOnAction(event -> {
-            reset();
-        });
+        reset.setOnAction(event -> { scale = 1; update(); });
+        zoomIn.setOnAction(event -> { scale *= 1.1; update(); });
+        zoomOut.setOnAction(event -> { scale /= 1.1; update(); });
 
-
-        zoomIn.setOnAction(event -> {
-            imageView.setFitHeight(imageView.getFitHeight()*1.1);
-            imageView.setFitWidth(imageView.getFitWidth()*1.1);
-            rectangle.setWidth(rectangle.getWidth()*1.1);
-            rectangle.setHeight(rectangle.getHeight()*1.1);
-            valueY*=1.1;
-            valueX*=1.1;
-            AnchorPane.setLeftAnchor(imageView,valueX);
-            AnchorPane.setTopAnchor(imageView,valueY);
-
-        });
-        zoomOut.setOnAction(event -> {
-            imageView.setFitHeight(imageView.getFitHeight()/1.1);
-            imageView.setFitWidth(imageView.getFitWidth()/1.1);
-            rectangle.setWidth(rectangle.getWidth()/1.1);
-            rectangle.setHeight(rectangle.getHeight()/1.1);
-            valueY/=1.1;
-            valueX/=1.1;
-            AnchorPane.setLeftAnchor(imageView,valueX);
-            AnchorPane.setTopAnchor(imageView,valueY);
-
-        });
-        choiceBox1.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue) -> {
+        direction.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue) -> {
             if(!newValue.equals(oldValue)) {
-                double x = widthRec;
-                widthRec = heightRec;
-                heightRec = x;
-                set();
+                update();
             }
         });
-        choiceBox.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
+
+        format.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-               if((Integer)newValue==0){
-                   widthRec=421;
-                   heightRec=608;
-               }
-               if((Integer)newValue==1){
-                   widthRec=608;
-                   heightRec=842;
-               }
-               choiceBox1.getSelectionModel().selectFirst();
-               set();
+               update();
             }
         });
-        choiceBox2.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
+
+        margins_box.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                set();
-                switch ((int)newValue){
-                    case 0:
-                        marginDown=marginLeft=marginRight=marginUp=18;
-                        break;
-                    case 1:
-                        marginDown=marginLeft=marginRight=marginUp=36;
-                        break;
-                    case 2:
-                        marginDown=marginUp=72;
-                        marginRight=marginLeft=54;
-                        break;
-                    case 3:
-                        marginLeft=marginRight=marginUp=marginDown=71;
-                        break;
-                    default:
-                        marginDown=marginLeft=marginRight=marginUp=18;
-                }
-                valueX=marginLeft;
-                valueY=marginUp;
-                WritableImage image = node.snapshot(new SnapshotParameters(), null);
-                imageView.setFitWidth(image.getWidth());
-                imageView.setFitHeight(image.getHeight());
-                imageView.setImage(image);
-//                if(imageView.getFitHeight()+marginDown>heightRec) {
-//                    imageView.setFitHeight(heightRec-2*marginDown);
-//                }
-//                if(imageView.getFitWidth()+marginLeft>widthRec)
-//                    imageView.setFitWidth(widthRec-2*marginLeft);
-                imageView.setFitHeight(heightRec-2*marginUp);
-                imageView.setFitWidth(widthRec-2*marginLeft);
-                AnchorPane.setTopAnchor(imageView, marginUp);
-                AnchorPane.setLeftAnchor(imageView, marginLeft);
+                margin_index = (int) newValue;
+                update();
+            }
+        });
+
+        direction.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                update();
             }
         });
 
     }
 
-    private void reset() {
-        marginRight=initRight;
-        marginLeft=initLeft;
-        marginDown=initDown;
-        marginUp=initUp;
-        choiceBox.getSelectionModel().selectFirst();
-        choiceBox1.getSelectionModel().selectFirst();
-        choiceBox2.getSelectionModel().selectFirst();
-        set();
-    }
-    public void set(){
-        if(node!=null) {
-            WritableImage image = node.snapshot(new SnapshotParameters(), null);
-            imageView.setFitWidth(image.getWidth());
-            imageView.setFitHeight(image.getHeight());
-            imageView.setImage(image);
-            imageView.setPreserveRatio(true);
-        }
-        imageView.setFitHeight(heightRec-2*marginUp);
-        imageView.setFitWidth(widthRec-2*marginLeft);
-
-        AnchorPane.setLeftAnchor(imageView, marginLeft);
-        AnchorPane.setTopAnchor(imageView, marginUp);
-        AnchorPane.setLeftAnchor(rectangle, 0.0);
-        AnchorPane.setTopAnchor(rectangle, 0.0);
-        rectangle.setHeight(heightRec);
-        rectangle.setWidth(widthRec);
-
-    }
     private void fillChoiceBox(){
-        choiceBox.getItems().addAll("A5", "A4");
-        choiceBox.getSelectionModel().selectFirst();
-        choiceBox1.getItems().addAll("Portrait","Paysage");
-        choiceBox1.getSelectionModel().selectFirst();
-        choiceBox2.getItems().addAll(  "Ultra Norrow: (0.64 cm) x 4", "Narrow: (1.27 cm) x 4",  "Moderate: ( 1.91 cm Left/Right\n" +
-                                                                                                  "            2.54 cm Up/Down)",
-                "Normal: (2.5 cm) x 4 ");
-        choiceBox2.getSelectionModel().selectFirst();
+        format.getItems().addAll("A5", "A4");
+        format.getSelectionModel().selectFirst();
+        direction.getItems().addAll("Portrait","Paysage");
+        direction.getSelectionModel().selectFirst();
+        margins_box.getItems().addAll(  "Ultra Norrow: (0.64 cm) x 4", "Narrow: (1.27 cm) x 4", "Normal: (2.5 cm) x 4 ");
+        margins_box.getSelectionModel().selectFirst();
+    }
+
+    private void update() {
+        String page = format.getValue();
+        boolean landscape = direction.getValue().equals("Paysage");
+
+        double height, width, rotation = 0;
+
+        if (page.equals("A5")) width = 421;
+        else width = 608;
+
+        height = Math.sqrt(2) * width;
+
+        if (landscape) {
+            rotation = -90;
+        }
+
+        width *= scale;
+        height *= scale;
+
+
+        switch (margin_index){
+            case 0:
+                margin_x = margin_y = 0;
+                break;
+            case 1:
+                margin_x = margin_y = 18;
+                break;
+            case 2:
+                margin_x = margin_y = 53;
+                break;
+            default:
+                margin_x = margin_y = 0;
+        }
+
+        margin_x *= scale;
+        margin_y *= scale;
+
+        width -= 2 * margin_x;
+        height -= 2 * margin_y;
+
+
+        imageView.setFitWidth(width);
+        imageView.setFitHeight(height);
+        imageView.setImage(img);
+
+        if (landscape) {
+            AnchorPane.setLeftAnchor(image_container, 70.0);
+            AnchorPane.setTopAnchor(image_container, -40.0);
+        }
+
+        else {
+            AnchorPane.setLeftAnchor(image_container, 0.0);
+            AnchorPane.setTopAnchor(image_container, 0.0);
+        }
+
+        image_container.setRotate(rotation);
+        image_container.setPadding(new Insets(margin_x, margin_y, margin_x, margin_y));
+
+
     }
 }

@@ -1,5 +1,6 @@
 package controllers;
 
+import com.jfoenix.controls.JFXTextField;
 import core.App;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
@@ -29,32 +30,15 @@ public class PatientsController extends Controller {
     TableView patients_table;
 
     @FXML
-    TextField search_nom;
-
-    @FXML
-    TextField search_prenom;
-
-    @FXML
-    ChoiceBox<String> search_genre;
-
-    @FXML
-    TextField search_telephone;
+    JFXTextField search;
 
     TableColumn<Patient, Void> col_btn;
 
-    @FXML
-    MenuItem menu_new;
-
-    @FXML
-    MenuItem menu_show;
-
-    @FXML
-    MenuItem menu_logout;
 
     public PatientsController() {
         title = "Patients";
-        min_width = width = 600;
-        min_height = height = 400;
+        min_width = width = 800;
+        min_height = height = 600;
     }
 
     public void acceuil() {
@@ -63,13 +47,6 @@ public class PatientsController extends Controller {
 
     @Override
     public void init() {
-        search_genre.getItems().addAll("Genre", "M", "F");
-
-
-        search_genre.getSelectionModel().selectedItemProperty().addListener((v, oldValue, NewValue) -> update());
-        search_nom.textProperty().addListener((v, oldValue, NewValue) -> update());
-        search_prenom.textProperty().addListener((v, oldValue, NewValue) -> update());
-        search_telephone.textProperty().addListener((v, oldValue, NewValue) -> update());
 
         patients_table.setRowFactory( tv -> {
             TableRow<Patient> row = new TableRow<Patient>();
@@ -85,74 +62,19 @@ public class PatientsController extends Controller {
             return row;
         });
 
-        patients_table.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                changeMenuState(patients_table.getSelectionModel().getSelectedItem() != null);
-            }
+        search.textProperty().addListener((observable, oldValue, newValue) -> {
+            update();
         });
 
-        patients_table.focusedProperty().addListener(new ChangeListener<Boolean>()
-        {
-            @Override
-            public void changed(ObservableValue<? extends Boolean> arg0, Boolean oldPropertyValue, Boolean newPropertyValue)
-            {
-                Patient selected_patient;
+        addActionsButtons();
 
-                if (newPropertyValue)
-                {
-                    selected_patient = (Patient) patients_table.getSelectionModel().getSelectedItem();
-                }
-                else
-                {
-                    selected_patient = null;
-                }
-
-                changeMenuState(selected_patient != null);
-            }
-        });
-
-//        addActionsButtons();
-
-        search_nom.requestFocus();
-        changeMenuState(false);
-
-        menu_logout.setOnAction((ActionEvent event) -> {
-            App.logout();
-        });
-
-        menu_new.setOnAction((ActionEvent event) -> {
-            newPatient();
-        });
-
-        menu_show.setOnAction((ActionEvent event) -> showPatient((Patient) patients_table.getSelectionModel().getSelectedItem()));
-
+        search.requestFocus();
         update();
     }
-
-    private void changeMenuState(boolean enabled) {
-        if (enabled == false) {
-            menu_show.setDisable(true);
-        }
-
-        else {
-            menu_show.setDisable(false);
-        }
-    }
-
     public void update() {
 
-        String nom_text = search_nom.getText();
-        String prenom_text = search_prenom.getText();
-        String telephone_text = search_telephone.getText();
-        String genre_text = search_genre.getValue();
 
-        if (nom_text == null) nom_text = "";
-        if (prenom_text == null) prenom_text = "";
-        if (genre_text == null) genre_text = "";
-        if (telephone_text == null) telephone_text = "";
-
-        ArrayList<Patient> patients = Patient.search(nom_text, prenom_text, genre_text, telephone_text);
+        ArrayList<Patient> patients = Patient.search(search.getText());
 
         ObservableList<Patient> observablePatients = FXCollections.observableArrayList();
         observablePatients.addAll(patients);
@@ -182,7 +104,14 @@ public class PatientsController extends Controller {
                             }
                         };
 
-                        layout.getChildren().addAll(show_btn);
+                        ActionButton add_btn = new ActionButton(this, "Ajouter Consultation", FontAwesomeIcon.PLUS, "#672ca0") {
+                            @Override
+                            public void onAction(Object patient) {
+                                addConsultation((Patient) patient);
+                            }
+                        };
+
+                        layout.getChildren().addAll(show_btn, add_btn);
 
                         return layout;
                     }
@@ -208,8 +137,17 @@ public class PatientsController extends Controller {
     }
 
     private void showPatient(Patient patient) {
-        App.newWindow("dossierPatient", new HashMap() {{
+        PatientsController self = this;
+        App.newWindow("ShowPatient", new HashMap() {{
             put("id", patient.getId());
+            put("main_window", self);
+        }});
+    }
+
+    private void addConsultation(Patient patient) {
+        App.newWindow("NewConsultation", new HashMap() {{
+            put("main_window", null);
+            put("patient_id", patient.getId());
         }});
     }
 
@@ -219,11 +157,6 @@ public class PatientsController extends Controller {
             put("main_window", self);
         }});
     }
-    public void resetSearch() {
-        search_nom.setText("");
-        search_prenom.setText("");
-        search_telephone.setText("");
-        search_genre.setValue("");
-    }
+
 }
 

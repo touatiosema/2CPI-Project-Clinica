@@ -25,40 +25,57 @@ public class NouveauMedicament extends Controller{
     TextField labType;
     @FXML
     Button btnSave;
+
     @FXML
-    Button btnCancel;
+    NewOrdonnanceController main_window;
 
     public NouveauMedicament(){
-        min_height=max_height=217;
-        min_width =max_width =337;
+        min_height=max_height=286;
+        min_width =max_width =400;
     }
     public void initialize(){
         //this.getWindow().initModality(Modality.APPLICATION_MODAL);
         btnSave.setOnAction(event -> save());
-        btnCancel.setOnAction(event -> close());
     }
 
     public void init(HashMap map){
-        modify=(boolean) map.get("modify");
-        idMedicament=(int) map.get("idMed");
-        medicamentsList = (MedicamentsList) map.get("Controller");
+        if (map.containsKey("main_window")) {
+            main_window = (NewOrdonnanceController) map.get("main_window");
+        }
+
+        else {
+            modify = (boolean) map.get("modify");
+            idMedicament = (int) map.get("idMed");
+            medicamentsList = (MedicamentsList) map.get("Controller");
+        }
+
     }
 
     private void save(){
         Medicament medicament;
         if(labNomCom.getText().isEmpty()||labNomSci.getText().isEmpty()||labType.getText().isEmpty())
-            labWarning.setText("Remplir tous les champs!!");
+            labWarning.setText("Remplir tous les champs !");
         else{
             medicament = new Medicament(labNomCom.getText(), labNomSci.getText(), labType.getText());
             if(Medicament.exist(medicament))
-                labWarning.setText("Ce medicament existe deja!");
+                labWarning.setText("Ce medicament existe deja !");
             else{
-                if(modify){
-                  Medicament.modifieMed(idMedicament, medicament);
-                }else
+
+                if (main_window != null) {
                     Medicament.insertNewMed(medicament);
-                medicamentsList.refresh();
-                close();
+                    main_window.update();
+                    getWindow().close();
+                }
+
+                else {
+                    if(modify){
+                        Medicament.modifieMed(idMedicament, medicament);
+                    }else
+                        Medicament.insertNewMed(medicament);
+                    medicamentsList.refresh();
+                    close();
+                }
+
             }
         }
     }

@@ -1,0 +1,58 @@
+.table-view {
+    -fx-table-header-border-color: #309bd1;
+    -fx-background-color:  #309bd1;
+    -fx-table-cell-border-color: #e2e2e2;
+    -fx-table-header-border-color: transparent;
+
+    -fx-column-halignment: left;
+    -fx-column-valignment: center;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+
+
+.table-view:focused {
+    -fx-background-insets: 0, 0, 1, 2;
+}
+
+.table-view .column-header,
+.table-view .column-header .filler,
+.table-view .column-header-background .filler {
+    -fx-border-color:  #309bd1;
+    -fx-background-color: #309bd1;
+}
+
+.table-view .column-header .label {
+    -fx-text-fill: white;
+    -fx-font-size: 13px;
+    -fx-padding: 10px;
+}
+
+.table-view  .column-header * {
+    -fx-alignment: center-left;
+}
+
+.table-view:focused .table-row-cell:filled:focused:selected {
+    -fx-background-color: #32a3d5;
+}
+
+
+.table-view .table-row-cell > *, .table-view .table-row-cell {
+    -fx-border-width: 0px;
+}
+
+.table-view .table-row-cell > * {
+    -fx-padding: 10px;
+}
+
+/*.button2 {*/
+    /*-fx-padding: 5 22 5 22;*/
+    /*-fx-border-color: #e2e2e2;*/
+    /*-fx-border-width: 2;*/
+    /*-fx-background-radius: 0;*/
+    /*-fx-background-color: #1d1d1d;*/
+    /*-fx-font-family: "Segoe UI", Helvetica, Arial, sans-serif;*/
+    /*-fx-font-size: 7pt;*/
+    /*-fx-text-fill: #d8d8d8;*/
+    /*-fx-background-insets: 0 0 0 0, 0, 1, 2;*/
+/*}*/
